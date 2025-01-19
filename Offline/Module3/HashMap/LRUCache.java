@@ -31,6 +31,27 @@ class LRUCache {
     }
     
     public int get(int key) {
+
+        Node temp = map.get(key);
+        if(temp == null){
+            return -1;
+        }
+        int value = temp.value;
+
+        temp.value = value;
+            // Break Connection 
+        Node prev = temp.prev;
+        Node next = temp.next;
+        prev.next = next;
+        next.prev = prev;
+            // put temp node after head
+        Node hn = this.head.next;
+        temp.next = hn;
+        temp.prev = head;
+        head.next = temp;
+        hn.prev = temp;
+        
+        return value;
         
     }
     
