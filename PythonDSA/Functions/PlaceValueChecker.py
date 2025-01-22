@@ -12,4 +12,8 @@ def isZeroPresentAtSecondPosition(n):
         
 
 
-isZeroPresentAtSecondPosition(25501)
+res = isZeroPresentAtSecondPosition(25501)
+if res == True:
+    prtint("Yes")
+else:
+    print("No")
