@@ -5,7 +5,7 @@ def isZeroPresentAtSecondPosition(n):
         rem = n%10
         que = n//10
         if placeValue == 2 and rem == 0:
-            return True
+            return "Muskan"
         n = que
     return False
         
@@ -13,7 +13,7 @@ def isZeroPresentAtSecondPosition(n):
 
 
 res = isZeroPresentAtSecondPosition(25501)
-if res == True:
-    prtint("Yes")
+if res == "Muskan":
+    print("Yes")
 else:
     print("No")
