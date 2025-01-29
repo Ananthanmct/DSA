@@ -1,5 +1,4 @@
 def take_input_in_list(n):
-    li = []
     i = 0
     while i < n:
         element = int(input("Enter value: "))
@@ -36,6 +35,7 @@ def max_element(arr):
 
 
 n = int(input("Enter value for n: "))
+li = []
 arr = take_input_in_list(n)
 
 
