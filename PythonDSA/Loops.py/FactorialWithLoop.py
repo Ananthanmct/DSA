@@ -6,4 +6,5 @@ while i<n:
     Fact=Fact*(i+1)
     i = i+1
 
+
 print(Fact)    
