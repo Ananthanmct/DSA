@@ -19,7 +19,7 @@ def sum_of_array(arr):
 def floor_of_average(arr):
     total_sum = sum_of_array(arr)  
     size = len(arr)
-    return total_sum // size  
+    return total_sum//size  
 
 
 def max_element(arr):
