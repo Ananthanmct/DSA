@@ -14,7 +14,7 @@ def second_largest_element(arr):
         i +=1
     return Smax    
  
-def second_approch(arr):
+def second_approach(arr):
     max = Smax = -10**9
     i = 0
     while i < len(arr):
@@ -30,5 +30,5 @@ def second_approch(arr):
     return Smax
 
 arr = [5,6,7,11,10,3]
-result = second_approch(arr)
+result = second_approach(arr)
 print(result)
