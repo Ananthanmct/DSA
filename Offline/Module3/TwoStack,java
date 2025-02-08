@@ -1,0 +1,96 @@
+import java.util.*;
+
+class TwoStacks {
+	int[] arr;
+	int n;
+	int t1, t2;
+
+	// Constructor
+	TwoStacks(int n)
+	{
+		this.n = n;
+		arr = new int[n];
+		t1 = -1;
+		t2 = n;
+	}
+
+	// Method to push an element x to stack1
+	void push1(int x)
+	{
+         if(t1 + 1 == t2){
+			return;
+		 }
+		t1 += 1;
+		arr[t1] = x;
+	}
+
+	// Method to push an element
+	// x to stack2
+	void push2(int x)
+	{
+       // Your code here
+	   if(t2 - 1 == t1){
+		return;
+	   }
+	   t2 -= 1;
+	   arr[t2] = x;
+	}
+
+	// Method to pop an element from first stack
+	int pop1()
+	{
+		if(t1 == -1){
+			return -1;
+		}
+		int val = arr[t1];
+		arr[t1] =  0;
+		t1--;
+		return val;
+	}
+
+	// Method to pop an element
+	// from second stack
+	int pop2()
+	{
+		if(t2 == n){
+			return -1;
+		}
+		int val = arr[t2];
+		arr[t2] = 0;
+		t2++;
+		return val;
+	}
+};
+public class Main {
+
+	/* Driver program to test twoStacks class */
+	public static void main(String[] args)
+	{
+		TwoStacks ts = new TwoStacks(50);
+        Scanner sc = new Scanner(System.in);
+        int n;
+        n = sc.nextInt();
+        for(int i =0; i<n; i++){
+            int temp;
+            temp = sc.nextInt();
+            if(temp == 1){ 
+				int val = ts.pop1();
+				System.out.println(val);
+			}
+            else if(temp==3){
+				int val  = ts.pop2();
+				System.out.println(val);
+			} 
+            else if(temp == 2) {
+                int temp2;
+                temp2 = sc.nextInt();
+                ts.push1(temp2);
+            }
+            else{
+                int temp2;
+                temp2 = sc.nextInt();
+                ts.push2(temp2);
+            }
+        }
+	}
+}
