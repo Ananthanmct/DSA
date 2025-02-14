@@ -5,6 +5,8 @@ import com.db.zepto.db_api.model.AppUser;
 import com.db.zepto.db_api.repository.AppUserRepository;
 import jakarta.persistence.Entity;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
@@ -28,10 +30,16 @@ public class AppUserController {
                 .orElse(null);
     }
 
+    @GetMapping("/email/{userEmail}")
+    public ResponseEntity getUserEmail(@PathVariable String userEmail){
+        AppUser user = appUserRepository.findByEmail(userEmail);
+        return new ResponseEntity(user, HttpStatus.OK);
+    }
+
 
     @PostMapping("/save")
     public AppUser saveUser(@RequestBody AppUser user){
-        AppOrder order = AppOrder.builder().build();
+
         appUserRepository.save(user);
         return user;
     }
