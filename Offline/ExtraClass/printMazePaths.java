@@ -1,7 +1,7 @@
 import java.io.*;
 import java.util.*;
 
-public class Main {
+public class printMazePaths {
 	public static void printMazePaths(int sr, int sc, int dr, int dc, String psf) {
         
         if(sr == dr && sc == dc){
