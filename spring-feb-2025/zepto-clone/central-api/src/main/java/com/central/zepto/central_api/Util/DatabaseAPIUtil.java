@@ -2,12 +2,15 @@ package com.central.zepto.central_api.Util;
 
 import com.central.zepto.central_api.models.AppUser;
 import com.central.zepto.central_api.models.Product;
+import com.central.zepto.central_api.models.WareHouse;
+import com.central.zepto.central_api.models.WareHouseProducts;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
+import java.util.UUID;
 
 @Component
 public class DatabaseAPIUtil extends ApiUtilImpl {
@@ -44,5 +47,24 @@ public class DatabaseAPIUtil extends ApiUtilImpl {
         String endPoint =  "/user/email/" + email;
         Object resp  = makeGetCall(dbApiUrl, endPoint, new HashMap<>());
         return mapper.map(resp, AppUser.class);
+    }
+
+    public AppUser getUserByUserId(UUID userId){
+        // need to make get call to dbApi
+        String endPoint = "/user/" + userId.toString();
+        Object resp = makeGetCall(dbApiUrl,endPoint, new HashMap<>());
+        return mapper.map(resp, AppUser.class);
+    }
+
+    public WareHouse createWareHouse(WareHouse wareHouse){
+        String endPoint = "/warehouse/save";
+        Object resp = makePostCall(dbApiUrl, endPoint, new HashMap<>(), wareHouse);
+        return mapper.map(resp, WareHouse.class);
+    }
+
+    public WareHouseProducts createWareHouseProducts(WareHouseProducts wareHouseProducts){
+        String endPoint = "/warehouse/products/save";
+        Object resp = makePostCall(dbApiUrl, endPoint, new HashMap<>(), wareHouseProducts);
+        return mapper.map(resp, WareHouseProducts.class);
     }
 }
