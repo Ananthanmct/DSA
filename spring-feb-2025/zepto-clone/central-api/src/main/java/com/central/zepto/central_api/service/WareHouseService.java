@@ -6,7 +6,9 @@ import com.central.zepto.central_api.Util.UserUtil;
 import com.central.zepto.central_api.enums.UserType;
 import com.central.zepto.central_api.exception.UnAuthorized;
 import com.central.zepto.central_api.exception.UserNotFoundException;
+import com.central.zepto.central_api.exception.WareHouseNotAvailableException;
 import com.central.zepto.central_api.models.AppUser;
+import com.central.zepto.central_api.models.Product;
 import com.central.zepto.central_api.models.WareHouse;
 import com.central.zepto.central_api.models.WareHouseProducts;
 import com.central.zepto.central_api.requestdto.RegisterWareHouseProductDTO;
@@ -14,6 +16,7 @@ import com.central.zepto.central_api.requestdto.RequestWarehouseDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -80,5 +83,28 @@ public class WareHouseService {
         WareHouseProducts wareHouseProductsResp = databaseAPIUtil.createWareHouseProducts(wareHouseProducts);
 
         return wareHouseProductsResp;
+    }
+
+    public void getWareHouseProducts(UUID userId){
+        // we need to check this user id is registered in our system or not
+        AppUser user = databaseAPIUtil.getUserByUserId(userId);
+        if(user == null){
+            throw new UserNotFoundException(String.format("User with id %s does not" +
+                    "exist in system", userId.toString()));
+        }
+
+        int pincode = user.getPincode();
+
+        // we need to find is there any warehouse present at that pincode
+
+        WareHouse wareHouse = databaseAPIUtil.getWareHouseByPincode(pincode);
+
+        if(wareHouse == null){
+            throw new WareHouseNotAvailableException(String.format(
+                    "We regret that we don't provide any service in your region"
+            ));
+        }
+
+        // We need to get all the products that are present in the warehouse.
     }
 }

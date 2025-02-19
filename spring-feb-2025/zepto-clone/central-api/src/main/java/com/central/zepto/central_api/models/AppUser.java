@@ -1,15 +1,19 @@
 package com.central.zepto.central_api.models;
 
 
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
 
 
 import java.util.UUID;
 
 
-@Data
+
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
+@ToString
 public class AppUser {
     UUID id;
     String name;

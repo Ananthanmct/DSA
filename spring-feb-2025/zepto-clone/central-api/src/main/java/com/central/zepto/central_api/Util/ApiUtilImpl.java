@@ -49,6 +49,7 @@ public class ApiUtilImpl implements ApiUtil{
 
     public Object makePostCall(String apiUrl, String apiEndpoint, HashMap<String, String>queryParams, Object requestBody){
        URI url = this.getFinalUrl(apiUrl, apiEndpoint, queryParams);
+       System.out.println(url);
        RequestEntity request = RequestEntity.post(url).body(requestBody);
        ResponseEntity<Object> response = restTemplate.exchange(url, HttpMethod.POST, request, Object.class);
        return response.getBody();

@@ -63,8 +63,14 @@ public class DatabaseAPIUtil extends ApiUtilImpl {
     }
 
     public WareHouseProducts createWareHouseProducts(WareHouseProducts wareHouseProducts){
-        String endPoint = "/warehouse/products/save";
+        String endPoint = "/warehouse/product/save";
         Object resp = makePostCall(dbApiUrl, endPoint, new HashMap<>(), wareHouseProducts);
         return mapper.map(resp, WareHouseProducts.class);
     }
+
+   public WareHouse getWareHouseByPincode(int pincode){
+        String endPoint = "/warehouse/pincode/" + pincode;
+        Object resp = makeGetCall(dbApiUrl, endPoint, new HashMap<>());
+        return mapper.map(resp, WareHouse.class);
+   }
 }
