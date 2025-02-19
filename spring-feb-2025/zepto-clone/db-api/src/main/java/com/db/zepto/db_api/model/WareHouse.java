@@ -9,7 +9,7 @@ import java.util.UUID;
 @Data
 public class WareHouse {
     @Id
-    @GeneratedValue()
+    @GeneratedValue(strategy = GenerationType.AUTO)
     UUID id;
     String name;
     String address;
