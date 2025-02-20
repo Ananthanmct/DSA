@@ -74,6 +74,9 @@ public class DatabaseAPIUtil extends ApiUtilImpl {
    public WareHouse getWareHouseByPincode(int pincode){
         String endPoint = "/warehouse/pincode/" + pincode;
         Object resp = makeGetCall(dbApiUrl, endPoint, new HashMap<>());
+        if(resp == null){
+            return null;
+        }
         return mapper.map(resp, WareHouse.class);
    }
 

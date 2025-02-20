@@ -1,10 +1,14 @@
 package com.central.zepto.central_api.controller;
 
+import com.central.zepto.central_api.exception.UserNotFoundException;
+import com.central.zepto.central_api.exception.WareHouseNotAvailableException;
 import com.central.zepto.central_api.models.AppUser;
 import com.central.zepto.central_api.models.Product;
 import com.central.zepto.central_api.requestdto.RegisterUserDTO;
 import com.central.zepto.central_api.service.UserService;
+import com.central.zepto.central_api.service.WareHouseService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,6 +20,8 @@ import java.util.UUID;
 public class UserController {
 
     private UserService userService;
+    @Autowired
+    private WareHouseService wareHouseService;
 
     @Autowired
     public UserController(UserService userService){
@@ -29,8 +35,17 @@ public class UserController {
     }
 
     @GetMapping("/products")
-    public void getProductsByPincode(@RequestParam UUID userId){
-        // warehouse service
+    public ResponseEntity getProductsByPincode(@RequestParam UUID userId){
+        try{
+
+            List<Product> products = wareHouseService.getWareHouseProducts(userId);
+            return new ResponseEntity(products, HttpStatus.OK);
+        }catch (WareHouseNotAvailableException wareHouseNotAvailableException){
+            return new ResponseEntity(wareHouseNotAvailableException.getMessage(), HttpStatus.OK);
+        }catch (UserNotFoundException userNotFoundException){
+            return new ResponseEntity(userNotFoundException.getMessage(), HttpStatus.NOT_FOUND);
+        }
+
     }
 
 }

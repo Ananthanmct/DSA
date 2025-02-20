@@ -13,13 +13,5 @@ public class RegisterUserDTO {
     String address;
     UserType userType;
 
-    @Data
-    public static class RegisterProductDTO {
-        String productName;
-        int productPrice;
-        String details;
-        String manufacturerEmail;
-        int weight;
-        int totalPurchase;
-    }
+
 }
