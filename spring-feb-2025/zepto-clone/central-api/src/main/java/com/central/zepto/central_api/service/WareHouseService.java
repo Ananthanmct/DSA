@@ -16,6 +16,7 @@ import com.central.zepto.central_api.requestdto.RequestWarehouseDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -85,7 +86,15 @@ public class WareHouseService {
         return wareHouseProductsResp;
     }
 
-    public void getWareHouseProducts(UUID userId){
+    public Product getProductById(UUID pid){
+        return databaseAPIUtil.getProductByProductId(pid);
+    }
+
+    public List<WareHouseProducts> getWareHouseProductsByWid(UUID wid){
+        return databaseAPIUtil.getProductsByWareHouseId(wid);
+    }
+
+    public List<Product> getWareHouseProducts(UUID userId){
         // we need to check this user id is registered in our system or not
         AppUser user = databaseAPIUtil.getUserByUserId(userId);
         if(user == null){
@@ -106,5 +115,15 @@ public class WareHouseService {
         }
 
         // We need to get all the products that are present in the warehouse.
+
+        List<WareHouseProducts> wareHouseProducts = this.getWareHouseProductsByWid(wareHouse.getId());
+        List<Product> products = new ArrayList<>();
+        for(WareHouseProducts wp : wareHouseProducts){
+            UUID pid = wp.getPid();
+            Product p  = this.getProductById(pid);
+            products.add(p);
+        }
+
+        return products;
     }
 }
