@@ -4,6 +4,7 @@ import com.central.zepto.central_api.Util.Adapter;
 import com.central.zepto.central_api.Util.DatabaseAPIUtil;
 import com.central.zepto.central_api.Util.UserUtil;
 import com.central.zepto.central_api.enums.UserType;
+import com.central.zepto.central_api.exception.ProductNotPresentException;
 import com.central.zepto.central_api.exception.UnAuthorized;
 import com.central.zepto.central_api.exception.UserNotFoundException;
 import com.central.zepto.central_api.exception.WareHouseNotAvailableException;
@@ -125,5 +126,16 @@ public class WareHouseService {
         }
 
         return products;
+    }
+
+    public WareHouseProducts getProductByWidPid(UUID wid, UUID pid){
+        // This method will call your database util
+        WareHouseProducts wareHouseProduct = databaseAPIUtil.getProductByWidPid(wid, pid);
+        if(wareHouseProduct == null){
+            throw new ProductNotPresentException(String.format(
+                    "Product with product id %s does not present in warehouse with wid %s"
+            ,pid.toString(),wid.toString()));
+        }
+        return wareHouseProduct;
     }
 }

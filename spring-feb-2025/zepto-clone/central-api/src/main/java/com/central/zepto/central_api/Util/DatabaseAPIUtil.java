@@ -1,9 +1,6 @@
 package com.central.zepto.central_api.Util;
 
-import com.central.zepto.central_api.models.AppUser;
-import com.central.zepto.central_api.models.Product;
-import com.central.zepto.central_api.models.WareHouse;
-import com.central.zepto.central_api.models.WareHouseProducts;
+import com.central.zepto.central_api.models.*;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -101,5 +98,18 @@ public class DatabaseAPIUtil extends ApiUtilImpl {
         String endPoint = "/product/" + pid.toString();
         Object resp = makeGetCall(dbApiUrl, endPoint, new HashMap<>());
         return mapper.map(resp, Product.class);
+   }
+
+
+   public WareHouseProducts getProductByWidPid(UUID wid, UUID pid){
+        String endPoint = "/warehouse/product/" + wid.toString() + "/" + pid.toString();
+        Object resp = makeGetCall(dbApiUrl, endPoint, new HashMap<>());
+        return mapper.map(resp, WareHouseProducts.class);
+   }
+
+   public AppOrder saveOrder(AppOrder order){
+        String endPoint = "/order/save";
+        Object resp = makePostCall(dbApiUrl, endPoint, new HashMap<>(), order);
+        return mapper.map(resp, AppOrder.class);
    }
 }
