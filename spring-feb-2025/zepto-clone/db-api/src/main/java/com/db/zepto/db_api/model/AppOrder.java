@@ -20,7 +20,7 @@ public class AppOrder {
     AppUser customer;
     @ManyToOne
     AppUser deliveryPartner;
-    int totalAmount;
+    double totalAmount;
     @OneToMany
     List<Product> products;
 }
