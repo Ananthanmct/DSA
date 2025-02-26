@@ -7,6 +7,8 @@ import com.central.zepto.central_api.requestdto.RegisterUserDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class UserService {
 
@@ -24,5 +26,9 @@ public class UserService {
         AppUser response  = databaseApiUtil.callCreateUserEndpoint(appUser);
 
         return response;
+    }
+
+    public List<AppUser> getDeliveryPartnerByPincode(int pincode){
+        return databaseApiUtil.getDeliveryPartnerByPincode(pincode);
     }
 }

@@ -1,10 +1,12 @@
 package com.central.zepto.central_api.service;
 
 import com.central.zepto.central_api.Util.DatabaseAPIUtil;
+import com.central.zepto.central_api.Util.MailUtil;
 import com.central.zepto.central_api.exception.ProductNotPresentException;
 import com.central.zepto.central_api.exception.UserNotFoundException;
 import com.central.zepto.central_api.exception.WareHouseNotAvailableException;
 import com.central.zepto.central_api.models.*;
+import com.central.zepto.central_api.requestdto.RequestOrderDTO;
 import com.central.zepto.central_api.requestdto.RequestOrderProductDTO;
 import com.central.zepto.central_api.responsedto.ResponseBillDTO;
 import com.central.zepto.central_api.responsedto.ResponseBillProductDTO;
@@ -27,10 +29,33 @@ public class OrderService {
     @Autowired
     WareHouseService wareHouseService;
 
+    @Autowired
+    MailUtil mailUtil;
+
 
     public double getPriceAfterDiscount(int amount, int discount){
         double offAmount = amount*(discount/100);
         return amount - offAmount;
+    }
+
+    public List<AppUser> getDeliveryPartnerByPincode(int pincode){
+        return databaseAPIUtil.getDeliveryPartnerByPincode(pincode);
+    }
+
+    public void notifyDeliveryPartner(int pincode, AppUser customer, ResponseBillDTO bill){
+        List<AppUser> dp = getDeliveryPartnerByPincode(pincode);
+        for(AppUser partner: dp){
+            // mail them
+            // we will mail all the delivery partner and delivery partner will accept
+            // amd reject the orders.
+            // We have developed another api for sending mail
+            // we will call mail api to send order notification to delivery doubts
+            RequestOrderDTO order = new RequestOrderDTO();
+            order.setCustomer(customer);
+            order.setDeliveryPartner(partner);
+            order.setBill(bill);
+            mailUtil.sendOrderNotification(order);
+        }
     }
 
     public ResponseBillDTO placeOrder(List<RequestOrderProductDTO> products,
@@ -86,10 +111,18 @@ public class OrderService {
 
         order = databaseAPIUtil.saveOrder(order);
 
+
+        // We need to notify all the delivery partners working at the pincode from
+        // which order is basically placed
+
         bill.setOrderId(order.getId());
         bill.setOrderPlacedTime(LocalDateTime.now());
         bill.setTotalBillPayed(totalAmount);
         bill.setProducts(billProducts);
+
+        notifyDeliveryPartner(wareHouse.getPincode(), user, bill);
+
+
         return bill;
     }
 }
