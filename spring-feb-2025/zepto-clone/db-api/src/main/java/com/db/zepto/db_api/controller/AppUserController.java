@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -48,6 +49,11 @@ public class AppUserController {
     public AppUser updateUser(@RequestBody AppUser user){
         appUserRepository.save(user);
         return user;
+    }
+
+    @GetMapping("/delivery-partner/{pincode}")
+    public List<AppUser> getDeliveryPartnerByPincode(@PathVariable int pincode){
+        return appUserRepository.getDeliveryPartnerByPincode(pincode);
     }
 
     @DeleteMapping("/delete/{userId}")
