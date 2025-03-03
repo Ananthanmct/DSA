@@ -1,15 +1,18 @@
 package com.db.zepto.db_api.model;
 
 import jakarta.persistence.*;
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
 @Entity
-@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
 @Builder
 public class AppOrder {
     @Id
@@ -21,6 +24,6 @@ public class AppOrder {
     @ManyToOne
     AppUser deliveryPartner;
     double totalAmount;
-    @OneToMany
+    @ManyToMany
     List<Product> products;
 }
