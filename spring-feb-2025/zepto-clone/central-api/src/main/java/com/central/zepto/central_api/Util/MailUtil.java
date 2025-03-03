@@ -17,4 +17,9 @@ public class MailUtil extends ApiUtilImpl {
         Object resp = makePutCall(mailApiUrl, endPoint, new HashMap<>(), orderDTO);
     }
 
+    public void sendAcceptOrderNotification(RequestOrderDTO orderDTO){
+        String endPoint = "/delivery-partner/order/accept/notify";
+        Object resp  = makePutCall(mailApiUrl, endPoint, new HashMap<>(), orderDTO);
+    }
+
 }

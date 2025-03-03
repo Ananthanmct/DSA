@@ -8,6 +8,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class UserUtil {
 
+
+
     public boolean isZeptoApplicationAdmin(AppUser user){
         if(user == null){
             throw new UserNotFoundException(String.format("User does not exist"));

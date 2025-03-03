@@ -2,6 +2,7 @@ package com.central.zepto.central_api.service;
 
 import com.central.zepto.central_api.Util.DatabaseAPIUtil;
 import com.central.zepto.central_api.Util.MailUtil;
+import com.central.zepto.central_api.enums.DeliveryPartnerStatus;
 import com.central.zepto.central_api.exception.ProductNotPresentException;
 import com.central.zepto.central_api.exception.UserNotFoundException;
 import com.central.zepto.central_api.exception.WareHouseNotAvailableException;
@@ -23,15 +24,21 @@ import java.util.UUID;
 @Service
 public class OrderService {
 
-    @Autowired
+
     DatabaseAPIUtil databaseAPIUtil;
 
-    @Autowired
+
     WareHouseService wareHouseService;
 
-    @Autowired
+
     MailUtil mailUtil;
 
+    @Autowired
+    public OrderService(DatabaseAPIUtil databaseAPIUtil, WareHouseService wareHouseService, MailUtil mailUtil) {
+        this.databaseAPIUtil = databaseAPIUtil;
+        this.wareHouseService = wareHouseService;
+        this.mailUtil = mailUtil;
+    }
 
     public double getPriceAfterDiscount(int amount, int discount){
         double offAmount = amount*(discount/100);
@@ -124,5 +131,30 @@ public class OrderService {
 
 
         return bill;
+    }
+
+    public void acceptOrder(UUID orderId, UUID deliveryPartnerId){
+        // we need to get order by order id
+        AppOrder order = databaseAPIUtil.getOrderByOrderId(orderId);
+        if(order.getDeliveryPartner() != null){
+            // notify delivery partner that order is already assigned
+            return;
+        }
+        AppUser deliveryPartner = databaseAPIUtil.getUserByUserId(deliveryPartnerId);
+
+        if(deliveryPartner.getStatus().equals(DeliveryPartnerStatus.OCCUPIED.toString())){
+            // notify delivery partner hey you are already occupied
+            return;
+        }
+        deliveryPartner.setStatus(DeliveryPartnerStatus.OCCUPIED.toString());
+        order.setDeliveryPartner(deliveryPartner);
+        // mail user hey we have assigned your order to delivery partner you will recieve delivery in 10 mins
+
+        RequestOrderDTO orderRb = new RequestOrderDTO();
+        orderRb.setOrder(order);
+        orderRb.setCustomer(order.getCustomer());
+        orderRb.setDeliveryPartner(deliveryPartner);
+
+        mailUtil.sendAcceptOrderNotification(orderRb);
     }
 }

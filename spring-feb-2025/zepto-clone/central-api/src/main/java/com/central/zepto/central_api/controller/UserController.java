@@ -5,6 +5,7 @@ import com.central.zepto.central_api.exception.WareHouseNotAvailableException;
 import com.central.zepto.central_api.models.AppUser;
 import com.central.zepto.central_api.models.Product;
 import com.central.zepto.central_api.requestdto.RegisterUserDTO;
+import com.central.zepto.central_api.security.JwtTokenUtil;
 import com.central.zepto.central_api.service.UserService;
 import com.central.zepto.central_api.service.WareHouseService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,14 +25,19 @@ public class UserController {
     private WareHouseService wareHouseService;
 
     @Autowired
+    private JwtTokenUtil jwtTokenUtil;
+
+    @Autowired
     public UserController(UserService userService){
         this.userService = userService;
     }
 
     @PostMapping("/register")
-    public AppUser createUser(@RequestBody RegisterUserDTO user){
+    public String createUser(@RequestBody RegisterUserDTO user){
         AppUser response  = userService.createUser(user);
-        return  response;
+        String credentials = response.getEmail() + ":" + response.getPassword();
+        String token = jwtTokenUtil.generateJwtToken(credentials);
+        return  token;
     }
 
     @GetMapping("/products")

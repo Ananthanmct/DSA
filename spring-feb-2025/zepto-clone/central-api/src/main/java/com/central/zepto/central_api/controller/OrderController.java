@@ -40,4 +40,11 @@ public class OrderController {
         }
 
     }
+
+    @GetMapping("/accept/{partnerId}/{orderId}")
+    public void acceptOrder(@PathVariable UUID partnerId,
+                            @PathVariable UUID orderId){
+        // Service
+        orderService.acceptOrder(orderId, partnerId);
+    }
 }
