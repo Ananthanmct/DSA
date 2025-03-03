@@ -22,4 +22,14 @@ public class DeliveryPartnerController {
         mailService.sendOrderNotifcationToDeliveryPartner(requestOrderDTO);
         return "Success";
     }
+
+    // When delivery partner will click accept button then customer should get mail
+    // Hey you delivery is assigned to this delivery partner he will be available in 10 mins
+    // Delivery Partner -> Congratulations order is assigned to you deliver at this address in 10 mins
+    @PutMapping("/order/accept/notify")
+    public String acceptMail(@RequestBody RequestOrderDTO requestOrderDTO) throws Exception{
+        mailService.notifyCustomerForOrderAssignment(requestOrderDTO);
+        mailService.notifyDeliveryPartnerForOrderAcceptance(requestOrderDTO);
+        return "Success";
+    }
 }

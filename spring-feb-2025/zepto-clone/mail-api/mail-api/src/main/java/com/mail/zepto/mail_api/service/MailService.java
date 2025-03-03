@@ -19,12 +19,19 @@ public class MailService {
     @Autowired
     TemplateEngine templateEngine;
 
-    public void sendOrderNotifcationToDeliveryPartner(RequestOrderDTO orderDetails) throws Exception{
+    public void sendOrderNotifcationToDeliveryPartner(RequestOrderDTO orderDetails) throws Exception {
         MimeMessage message = mailSender.createMimeMessage();
         MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(message);
         mimeMessageHelper.setTo(orderDetails.getDeliveryPartner().getEmail());
-        mimeMessageHelper.setSubject("A new order has been placed. Please review the detail");
+        mimeMessageHelper.setSubject("A new order has been placed. Please review the details");
 
+        // Define your base URL
+        String baseUrl = "http://localhost:8082"; // Change this to your actual deployment URL
+
+        // Construct full URL
+        String acceptUrl = baseUrl + "/api/v1/central/order/accept/"
+                + orderDetails.getDeliveryPartner().getId().toString()
+                + "/" + orderDetails.getBill().getOrderId();
 
         Context context = new Context();
         context.setVariable("deliveryPartnerName", orderDetails.getDeliveryPartner().getName());
@@ -34,10 +41,49 @@ public class MailService {
         context.setVariable("orderId", orderDetails.getBill().getOrderId());
         context.setVariable("productList", orderDetails.getBill().getProducts());
         context.setVariable("totalBill", orderDetails.getBill().getTotalBillPayed());
-
+        context.setVariable("acceptEndpoint", acceptUrl);
 
         String htmlTemplate = templateEngine.process("order-notification", context);
         mimeMessageHelper.setText(htmlTemplate, true);
+        mailSender.send(message);
+    }
+
+
+    public void notifyDeliveryPartnerForOrderAcceptance(RequestOrderDTO orderDTO) throws Exception{
+        MimeMessage message = mailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(message);
+        Context context = new Context();
+        context.setVariable("customerName", orderDTO.getCustomer().getName());
+        context.setVariable("customerPhone", orderDTO.getCustomer().getPhoneNumber());
+        context.setVariable("customerAddress", orderDTO.getCustomer().getAddress());
+        context.setVariable("orderId", orderDTO.getOrder().getId());
+        context.setVariable("pickupLocation", orderDTO.getDeliveryPartner().getAddress());
+
+        String htmlTemplate = templateEngine.process("order-accept-notification", context);
+
+        helper.setTo(orderDTO.getDeliveryPartner().getEmail());
+        helper.setSubject("Order Assigned");
+        helper.setText(htmlTemplate, true);
+
+        mailSender.send(message);
+    }
+
+    public void notifyCustomerForOrderAssignment(RequestOrderDTO orderDTO) throws  Exception{
+        MimeMessage message = mailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(message);
+
+        Context context = new Context();
+        context.setVariable("deliveryPartnerName", orderDTO.getDeliveryPartner().getName());
+        context.setVariable("customerName", orderDTO.getCustomer().getName());
+        context.setVariable("deliveryPartnerName", orderDTO.getDeliveryPartner().getPhoneNumber());
+        context.setVariable("vehicleNumber", 9314);
+
+        String htmlTemplate = templateEngine.process("order-assigned", context);
+
+        helper.setText(htmlTemplate, true);
+        helper.setSubject("Order Assigned");
+        helper.setTo(orderDTO.getCustomer().getEmail());
+
         mailSender.send(message);
     }
 }

@@ -7,4 +7,5 @@ public class RequestOrderDTO {
     AppUser customer;
     AppUser deliveryPartner;
     ResponseBillDTO bill;
+    AppOrder order;
 }
