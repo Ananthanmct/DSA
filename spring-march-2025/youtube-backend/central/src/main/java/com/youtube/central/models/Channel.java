@@ -3,6 +3,7 @@ package com.youtube.central.models;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -19,6 +20,8 @@ public class Channel {
     UUID id;
     @ManyToOne
     AppUser user;
+    String description;
+    String name;
     Double watchHours;
     boolean isMonetized;
     int totalViews;
@@ -28,4 +31,6 @@ public class Channel {
     List<Video> videos;
     @OneToMany
     List<PlayList> playLists;
+    LocalDateTime createdAt;
+    LocalDateTime updatedAt;
 }
