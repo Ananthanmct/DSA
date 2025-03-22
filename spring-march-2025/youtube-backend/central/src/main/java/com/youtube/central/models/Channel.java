@@ -19,7 +19,7 @@ public class Channel {
     @GeneratedValue(strategy = GenerationType.AUTO)
     UUID id;
     @ManyToOne
-    AppUser user;
+    AppUser user; // channel owner
     String description;
     String name;
     Double watchHours;
@@ -27,6 +27,8 @@ public class Channel {
     int totalViews;
     int totalLikeCount;
     int totalSubs;
+    @OneToMany // ChannelId vs UserId
+    List<AppUser> subscribers;
     @OneToMany
     List<Video> videos;
     @OneToMany

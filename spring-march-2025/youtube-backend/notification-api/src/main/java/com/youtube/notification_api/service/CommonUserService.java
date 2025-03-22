@@ -69,4 +69,21 @@ public class CommonUserService {
         log.info("Mimemessage created calling mail service to send mail");
         mailService.sendEmail(mimeMessage);
     }
+
+    public void sendSubscriberAddedMail(NotificationMessage message) throws Exception{
+        Context context = new Context();
+        context.setVariable("channelName", message.getName());
+        context.setVariable("platformName", platformName);
+
+        String htmlTemplate = templateEngine.process("subscriber-added", context);
+
+        MimeMessage mimeMessage = javaMailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(mimeMessage);
+        helper.setTo(message.getEmail());
+        helper.setText(htmlTemplate, true);
+        helper.setSubject("New Subscriber Alert!");
+
+        mailService.sendEmail(mimeMessage);
+
+    }
 }
