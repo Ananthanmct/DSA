@@ -1,9 +1,12 @@
 package com.youtube.video_service.config;
 
+import com.youtube.video_service.util.ApiTemplate;
+import com.youtube.video_service.util.ApiTemplateImpl;
 import io.imagekit.sdk.ImageKit;
 import io.imagekit.sdk.config.Configuration;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.Properties;
 
@@ -23,6 +26,16 @@ public class AppConfig {
          Configuration configuration = new Configuration(publicKey, privateKey, urlEndPoint);
          imageKit.setConfig(configuration);
          return imageKit;
+    }
+
+    @Bean
+    public ApiTemplate getApiTemplate(){
+        return new ApiTemplateImpl();
+    }
+
+    @Bean
+    public RestTemplate getRestTemplate(){
+        return new RestTemplate();
     }
 
 }
