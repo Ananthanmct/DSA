@@ -1,7 +1,10 @@
 package com.youtube.central.controller;
 
 import com.youtube.central.dto.CreateChannelRequestBody;
+import com.youtube.central.dto.VideoDetailsDTO;
+import com.youtube.central.repository.VideoRepo;
 import com.youtube.central.service.ChannelService;
+import com.youtube.central.service.VideoService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -15,6 +18,9 @@ public class ChannelController {
 
     @Autowired
     ChannelService channelService;
+
+    @Autowired
+    VideoService videoService;
 
     @PostMapping("/create")
     public void createChannel(@RequestBody CreateChannelRequestBody channelDetails){
@@ -32,5 +38,11 @@ public class ChannelController {
         // We need to call service
 
         channelService.addSubscriber(userId, channelId);
+    }
+
+    @PostMapping("/{channelId}/video/upload")
+    public void saveVideoDetails(@RequestBody VideoDetailsDTO videoDetailsDTO,
+                                 @PathVariable UUID channelId){
+        videoService.saveVideoDetails(channelId, videoDetailsDTO);
     }
 }

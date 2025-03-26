@@ -35,6 +35,10 @@ public class ChannelService {
         return channelRepo.findById(channelId).orElse(null);
     }
 
+    public void updateChannel(Channel channel){
+        channelRepo.save(channel);
+    }
+
     public void createChannel(CreateChannelRequestBody channelDetails){
         String email = channelDetails.getUserEmail();
         // we need to check with this email user is present inside database or not
