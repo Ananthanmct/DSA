@@ -2,6 +2,7 @@ package com.youtube.video_service.controller;
 
 import com.youtube.video_service.dto.GeneralMessage;
 import com.youtube.video_service.dto.VideoDetail;
+import com.youtube.video_service.dto.VideoDetailRequestBody;
 import com.youtube.video_service.exception.InvalidFileType;
 import com.youtube.video_service.service.UploadService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
 import java.util.UUID;
 
 @RestController
@@ -20,7 +22,10 @@ public class VideoController {
     UploadService uploadService;
 
     @PostMapping("/upload")
-    public ResponseEntity uploadVideo(@RequestPart("videoFile")MultipartFile video){
+    public ResponseEntity uploadVideo(@RequestPart("videoFile")MultipartFile video,
+                                      @RequestParam UUID channelId,
+                                      @RequestBody VideoDetailRequestBody videoDetails){
+
         try{
             VideoDetail videoDetail = uploadService.uploadVideo(video);
             return new ResponseEntity(videoDetail, HttpStatus.CREATED); // 201

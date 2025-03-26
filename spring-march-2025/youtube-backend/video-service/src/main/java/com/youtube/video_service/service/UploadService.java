@@ -1,16 +1,19 @@
 package com.youtube.video_service.service;
 
 import com.youtube.video_service.dto.VideoDetail;
+import com.youtube.video_service.dto.VideoDetailRequestBody;
 import com.youtube.video_service.exception.InvalidFileType;
 import io.imagekit.sdk.ImageKit;
 import io.imagekit.sdk.exceptions.*;
 import io.imagekit.sdk.models.FileCreateRequest;
 import io.imagekit.sdk.models.results.Result;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.UUID;
 
 @Service
 public class UploadService {
@@ -23,8 +26,9 @@ public class UploadService {
         return res;
     }
 
-    public VideoDetail uploadVideo(MultipartFile video) throws IOException, ForbiddenException, TooManyRequestsException, InternalServerException, UnauthorizedException, BadRequestException, UnknownException {
-        // We need to validate file is having what kind of type
+    public VideoDetail uploadVideo(MultipartFile video,
+                                   UUID channelId,
+                                   VideoDetailRequestBody videoDetails) throws IOException, ForbiddenException, TooManyRequestsException, InternalServerException, UnauthorizedException, BadRequestException, UnknownException {
         boolean isVideo = isVideoFile(video);
         if(!isVideo){
             throw new InvalidFileType("File uploaded is not video");
@@ -32,19 +36,19 @@ public class UploadService {
 
             // If file is of type video then we need to convert it in byte array
             byte [] videoBytes = video.getBytes(); // so to pass over the network we are converting our multipart file to videobytes
-
             // We need to create one request which we will upload it to imagekit.io
-
             FileCreateRequest videoRequest = new FileCreateRequest(videoBytes, video.getOriginalFilename());
             videoRequest.setUseUniqueFileName(true);
-
             Result result = imageKit.upload(videoRequest); // By this line video will get uploaded over image kit server.
             String videoId = result.getFileId();
             String videoUrl = result.getUrl();
-
             VideoDetail videoDetail = new VideoDetail();
             videoDetail.setVideoId(videoId);
             videoDetail.setVideoUrl(videoUrl);
+
+            // We need to make a call to central api to save video details in video detail table.
+
+
 
             return videoDetail;
     }
