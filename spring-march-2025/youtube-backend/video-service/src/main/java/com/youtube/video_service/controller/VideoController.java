@@ -21,13 +21,13 @@ public class VideoController {
     @Autowired
     UploadService uploadService;
 
-    @PostMapping("/upload")
+    @PostMapping(value = "/upload", consumes = {"multipart/form-data"})
     public ResponseEntity uploadVideo(@RequestPart("videoFile")MultipartFile video,
                                       @RequestParam UUID channelId,
-                                      @RequestBody VideoDetailRequestBody videoDetails){
+                                      @RequestPart("videodetails") VideoDetailRequestBody videoDetails){
 
         try{
-            VideoDetail videoDetail = uploadService.uploadVideo(video);
+            VideoDetail videoDetail = uploadService.uploadVideo(video, channelId, videoDetails);
             return new ResponseEntity(videoDetail, HttpStatus.CREATED); // 201
         }catch (InvalidFileType invalidFileType){
             GeneralMessage generalMessage = new GeneralMessage();
