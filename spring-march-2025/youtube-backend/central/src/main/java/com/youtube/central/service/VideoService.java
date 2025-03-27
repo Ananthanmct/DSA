@@ -28,6 +28,8 @@ public class VideoService {
     @Autowired
     RabbitMqService rabbitMqService;
 
+    String videoLink;
+
     public void saveVideo(Video video){
         // Video repository
          videoRepo.save(video);
@@ -51,7 +53,7 @@ public class VideoService {
         video.setTags(dbTagList);
         // save these video details inside video table.
         this.saveVideo(video);
-
+        this.videoLink = videoDetailsDTO.getVideoLink();
         // we need to update list videos of channel
         channel.getVideos().add(video);
         channelService.updateChannel(channel);
@@ -63,8 +65,8 @@ public class VideoService {
         for(int i = 0; i < subscribers.size(); i++){
             AppUser subscriber = subscribers.get(i);
             NotificationMessage notificationMessage = new NotificationMessage();
-            notificationMessage.setName(subscriber.getName());
-            notificationMessage.setType("new-video");
+            notificationMessage.setName(videoLink);
+            notificationMessage.setType("new_video");
             notificationMessage.setEmail(subscriber.getEmail());
             rabbitMqService.insertMessageToQueue(notificationMessage);
         }
