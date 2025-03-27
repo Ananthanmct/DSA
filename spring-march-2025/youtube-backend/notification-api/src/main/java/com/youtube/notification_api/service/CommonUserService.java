@@ -82,8 +82,24 @@ public class CommonUserService {
         helper.setTo(message.getEmail());
         helper.setText(htmlTemplate, true);
         helper.setSubject("New Subscriber Alert!");
-
         mailService.sendEmail(mimeMessage);
+    }
 
+    public void notifyNewVideoUploadedToSubscriber(NotificationMessage notificationMessage) throws Exception{
+        String subscriberEmail = notificationMessage.getEmail();
+        String subscriberName = notificationMessage.getName();
+
+        Context context = new Context();
+        context.setVariable("subscriberName", subscriberEmail);
+        context.setVariable("videoLink", notificationMessage.getName());
+
+        String htmlTemplate = templateEngine.process("new-video-notification", context);
+        log.info(htmlTemplate);
+        MimeMessage mimeMessage = javaMailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(mimeMessage);
+        helper.setTo(subscriberEmail);
+        helper.setText(htmlTemplate, true);
+        helper.setSubject("New Video Alert !!");
+        mailService.sendEmail(mimeMessage);
     }
 }

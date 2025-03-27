@@ -2,6 +2,7 @@ package com.youtube.video_service.service;
 
 import com.youtube.video_service.dto.VideoDetail;
 import com.youtube.video_service.dto.VideoDetailRequestBody;
+import com.youtube.video_service.dto.VideoDetailsDTO;
 import com.youtube.video_service.exception.InvalidFileType;
 import io.imagekit.sdk.ImageKit;
 import io.imagekit.sdk.exceptions.*;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Service
@@ -20,6 +22,9 @@ public class UploadService {
 
     @Autowired
     ImageKit imageKit;
+
+    @Autowired
+    CentralApiConnectionService centralApiConnectionService;
 
     public boolean isVideoFile(MultipartFile file){
         boolean res = file.getContentType().startsWith("video/");
@@ -47,7 +52,15 @@ public class UploadService {
             videoDetail.setVideoUrl(videoUrl);
 
             // We need to make a call to central api to save video details in video detail table.
-
+            VideoDetailsDTO videoDetailsDTO = new VideoDetailsDTO();
+            videoDetailsDTO.setVideoLink(videoUrl);
+            videoDetailsDTO.setId(videoId);
+            videoDetailsDTO.setTags(videoDetails.getTags());
+            videoDetailsDTO.setUploadDateTime(LocalDateTime.now());
+            videoDetailsDTO.setUpdatedAt(LocalDateTime.now());
+            videoDetailsDTO.setName(videoDetails.getName());
+            videoDetailsDTO.setDescription(videoDetails.getDescription());
+            centralApiConnectionService.saveVideoDetails(channelId, videoDetailsDTO);
 
 
             return videoDetail;

@@ -35,6 +35,9 @@ public class CommonController {
             }else if(message.getType().equals(NotificationType.create_channel.toString())){
                 log.info("CommonController: Type of notification is create_channel calling commonuserservice");
                 commonUserService.sendCreateChannelNotification(message);
+            }else if(message.getType().equals(NotificationType.new_video.toString())){
+                log.info("got type of message as new_video");
+                commonUserService.notifyNewVideoUploadedToSubscriber(message);
             }
         }catch(Exception e){
             log.error(e.getMessage());
