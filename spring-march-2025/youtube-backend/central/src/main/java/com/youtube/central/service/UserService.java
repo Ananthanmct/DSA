@@ -1,8 +1,10 @@
 package com.youtube.central.service;
 
 import com.youtube.central.dto.NotificationMessage;
+import com.youtube.central.dto.UserCredentialsDTO;
 import com.youtube.central.models.AppUser;
 import com.youtube.central.repository.AppUserRepo;
+import com.youtube.central.security.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
@@ -22,6 +24,9 @@ import java.util.function.Function;
 @Service
 public class UserService {
     AppUserRepo appUserRepo;
+
+    @Autowired
+    JwtUtil jwtUtil;
     RabbitMqService rabbitMqService;
     @Autowired
     public UserService(AppUserRepo appUserRepo,
@@ -32,6 +37,17 @@ public class UserService {
 
     public AppUser getUserByEmail(String email){
        return appUserRepo.findByEmail(email);
+    }
+
+    public String loginUser(UserCredentialsDTO credentials){
+        String email = credentials.getEmail(); // H.W. validate email
+        AppUser user = this.getUserByEmail(email);
+        if(user.getPassword().equals(credentials.getPassword())){
+            // generate token
+            String cred = user.getEmail() + ":" + user.getPassword();
+            return jwtUtil.generateToken(cred);
+        }
+        return "Incorrect Password";
     }
 
     public void registerUser(AppUser user){
