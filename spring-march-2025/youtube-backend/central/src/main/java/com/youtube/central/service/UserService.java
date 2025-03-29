@@ -25,8 +25,7 @@ import java.util.function.Function;
 public class UserService {
     AppUserRepo appUserRepo;
 
-    @Autowired
-    JwtUtil jwtUtil;
+
     RabbitMqService rabbitMqService;
     @Autowired
     public UserService(AppUserRepo appUserRepo,
@@ -45,7 +44,7 @@ public class UserService {
         if(user.getPassword().equals(credentials.getPassword())){
             // generate token
             String cred = user.getEmail() + ":" + user.getPassword();
-            return jwtUtil.generateToken(cred);
+            return cred;
         }
         return "Incorrect Password";
     }

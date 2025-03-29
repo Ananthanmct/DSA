@@ -2,6 +2,7 @@ package com.youtube.central.controller;
 
 import com.youtube.central.dto.UserCredentialsDTO;
 import com.youtube.central.models.AppUser;
+import com.youtube.central.security.JwtUtil;
 import com.youtube.central.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -14,13 +15,19 @@ public class UserController {
     UserService userService;
 
     @Autowired
+    JwtUtil jwtUtil;
+
+    @Autowired
     public UserController(UserService userService){
         this.userService = userService;
     }
 
     @PostMapping("/register")
-    public void registerUser(@RequestBody AppUser user){
+    public String registerUser(@RequestBody AppUser user){
+
         userService.registerUser(user);
+        String credentials = user.getEmail() + ":" + user.getPassword();
+        return jwtUtil.generateToken(credentials);
     }
 
     @GetMapping("/login")
@@ -29,7 +36,8 @@ public class UserController {
         if(resp.equals("Incorrect Password")){
             return new ResponseEntity("Incorrect Password", HttpStatus.UNAUTHORIZED);
         }else{
-            return new ResponseEntity(resp, HttpStatus.OK);
+            String token = jwtUtil.generateToken(resp);
+            return new ResponseEntity(token, HttpStatus.OK);
         }
     }
 }
