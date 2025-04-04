@@ -21,7 +21,9 @@ public class JwtConfiguration {
                 .authorizeHttpRequests(
                         auth -> auth.requestMatchers(
                                 "/api/central/user/register",
-                                "/api/central/user/login"
+                                "/api/central/user/login",
+                                        "/api/v1/central/security/get-credential/**",
+                                "/api/v1/central/security/validate-token/**"
                         ).permitAll()
                                 .anyRequest().authenticated()
                 )

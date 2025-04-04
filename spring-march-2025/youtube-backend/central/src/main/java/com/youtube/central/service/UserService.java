@@ -62,6 +62,8 @@ public class UserService {
         rabbitMqService.insertMessageToQueue(message);
     }
 
+
+
     public AppUser getUserById(UUID userId){
         return appUserRepo.findById(userId).orElse(null);
     }
