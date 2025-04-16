@@ -2,6 +2,7 @@ package com.bms.dbapi.controller;
 
 import com.bms.dbapi.models.AppUser;
 import com.bms.dbapi.repository.AppUserRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,6 +12,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/v1/db/user")
+@Slf4j
 public class AppUserController {
 
     @Autowired
@@ -19,6 +21,7 @@ public class AppUserController {
     @PostMapping("/create")
     public ResponseEntity createUser(@RequestBody AppUser user){
         appUserRepository.save(user);
+        log.info("Recieved request with the request body : " + user.toString());
         return new ResponseEntity(user, HttpStatus.CREATED);
     }
 
