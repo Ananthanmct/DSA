@@ -1,6 +1,9 @@
 package com.bms.central_api_v1.util;
 
+import com.bms.central_api_v1.enums.TheatherStatus;
 import com.bms.central_api_v1.models.AppUser;
+import com.bms.central_api_v1.models.Theather;
+import com.bms.central_api_v1.requestbody.CreateTheatherRB;
 import com.bms.central_api_v1.requestbody.CreateUserRB;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +21,17 @@ public class Mapper {
         appUser.setPhoneNumber(createUserRB.getPhoneNumber());
         appUser.setUserType(createUserRB.getUserType().toString());
         return appUser;
+    }
+
+    public Theather mapTheatherRBToTheatherModel(CreateTheatherRB theatherRB, AppUser owner){
+        Theather theather = new Theather();
+        theather.setAddress(theather.getAddress());
+        theather.setOwner(owner);
+        theather.setStatus(TheatherStatus.REQUEST_RAISED.toString());
+        theather.setPinCode(theather.getPinCode());
+        theather.setState(theatherRB.getState());
+        theather.setName(theatherRB.getName());
+        return theather;
     }
 
 }

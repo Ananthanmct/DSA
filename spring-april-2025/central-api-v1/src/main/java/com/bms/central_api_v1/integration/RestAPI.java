@@ -1,5 +1,6 @@
 package com.bms.central_api_v1.integration;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
@@ -9,6 +10,9 @@ import java.net.URI;
 import java.util.Map;
 
 public abstract class RestAPI {
+
+    @Autowired
+    RestTemplate restTemplate;
 
     public String addQueryParams(String url, Map<String, String> queryParams){
         if(queryParams.size() == 0){
@@ -35,7 +39,7 @@ public abstract class RestAPI {
         url = this.addQueryParams(url, queryParams);
         URI finalUrl = URI.create(url);
         RequestEntity requestEntity = RequestEntity.post(finalUrl).body(requestBody);
-        RestTemplate restTemplate = new RestTemplate();
+        //RestTemplate restTemplate = new RestTemplate();
         ResponseEntity<Object> response = restTemplate.exchange(finalUrl, HttpMethod.POST, requestEntity, Object.class);
         return response.getBody();
     }
@@ -43,7 +47,7 @@ public abstract class RestAPI {
         String url = apiBaseUrl + apiEndPoint;
         url = this.addQueryParams(url, queryParams);
         RequestEntity requestEntity = RequestEntity.get(url).build();
-        RestTemplate restTemplate = new RestTemplate();
+        //RestTemplate restTemplate = new RestTemplate();
         ResponseEntity<Object> response = restTemplate.exchange(url, HttpMethod.GET, requestEntity, Object.class);
         return response.getBody();
     }
@@ -52,7 +56,7 @@ public abstract class RestAPI {
         url = this.addQueryParams(url, queryParams);
         URI finalUrl = URI.create(url);
         RequestEntity requestEntity = RequestEntity.put(finalUrl).body(requestBody);
-        RestTemplate restTemplate = new RestTemplate();
+        //RestTemplate restTemplate = new RestTemplate();
         ResponseEntity<Object> response = restTemplate.exchange(finalUrl, HttpMethod.PUT, requestEntity, Object.class);
         return response.getBody();
     }
@@ -60,7 +64,7 @@ public abstract class RestAPI {
         String url = apiBaseUrl + apiEndPoint;
         url = this.addQueryParams(url, queryParams);
         RequestEntity requestEntity = RequestEntity.delete(url).build();
-        RestTemplate restTemplate = new RestTemplate();
+        //RestTemplate restTemplate = new RestTemplate();
         ResponseEntity<Object> response = restTemplate.exchange(url, HttpMethod.DELETE, requestEntity, Object.class);
         return response.getBody();
     }

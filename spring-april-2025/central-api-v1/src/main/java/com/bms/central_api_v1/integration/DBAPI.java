@@ -1,9 +1,12 @@
 package com.bms.central_api_v1.integration;
 
 import com.bms.central_api_v1.models.AppUser;
+import com.bms.central_api_v1.models.Theather;
+import com.bms.central_api_v1.requestbody.CreateTheatherRB;
 import com.bms.central_api_v1.requestbody.CreateUserRB;
 import com.bms.central_api_v1.util.Mapper;
 import lombok.extern.slf4j.Slf4j;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpMethod;
@@ -14,10 +17,11 @@ import org.springframework.web.client.RestTemplate;
 
 import java.net.URI;
 import java.util.HashMap;
+import java.util.UUID;
 
 @Service
 @Slf4j
-public class DBAPI extends RestAPI {
+public class DBAPI extends RestAPI  {
     // This class will have different methods such that we make call to different endpoints of db api.
     // For example : You want to hit create user endpoint of dbapi so for that endpoint we will create one method.
 
@@ -27,11 +31,32 @@ public class DBAPI extends RestAPI {
     @Autowired
     Mapper mapper;
 
-    public Object callCreateUserEndpoint(CreateUserRB createUserRB){
+    @Autowired
+    ModelMapper modelMapper;
+
+    public AppUser callCreateUserEndpoint(CreateUserRB createUserRB){
         AppUser appUser = mapper.mapCreateUserRBToAppUser(createUserRB);
         String endPoint = "/user/create";
         log.info("Calling /user/create endpoint of dbapi");
         Object resp = this.makePostCall(baseUrl, endPoint, appUser, new HashMap<>());
-        return resp;
+        AppUser userResp = modelMapper.map(resp, AppUser.class);
+        return userResp;
+    }
+
+    public AppUser callGetUserByIdEndpoint(UUID userId){
+        String endPoint = "/user/" + userId.toString();
+        Object resp = this.makeGetCall(baseUrl, endPoint, new HashMap<>());
+        if(resp == null){
+            return null;
+        }
+        return modelMapper.map(resp, AppUser.class);
+    }
+
+    public Theather callCreateTheatherEndpoint(CreateTheatherRB theatherRB, AppUser owner){
+        // we need to map theatherRB to Theather model object
+        Theather theather = mapper.mapTheatherRBToTheatherModel(theatherRB, owner);
+        String endPoint = "/theather/create";
+        Object resp = this.makePostCall(baseUrl, endPoint, theather, new HashMap<>());
+        return modelMapper.map(resp, Theather.class);
     }
 }
