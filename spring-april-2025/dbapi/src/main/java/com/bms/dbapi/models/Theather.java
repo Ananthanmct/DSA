@@ -22,4 +22,5 @@ public class Theather {
     String state;
     @ManyToOne
     AppUser owner;
+    String status;
 }
