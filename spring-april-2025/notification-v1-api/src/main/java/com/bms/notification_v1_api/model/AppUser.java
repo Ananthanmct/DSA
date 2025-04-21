@@ -12,7 +12,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 public class AppUser {
-    UUID id; // Base64
+    UUID id;
     String name;
     String email;
     String password;
