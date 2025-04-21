@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -37,6 +38,10 @@ public class UserService {
             ));
         }
         return theatherOwner.getUserType().equals(UserType.THEATHER_OWNER.toString()) ? true : false;
+    }
+
+    public List<AppUser> getAllAdmins(){
+        return dbapi.callGetAllAdminsEndpoint();
     }
 
 }

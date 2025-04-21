@@ -4,6 +4,7 @@ import com.bms.central_api_v1.models.AppUser;
 import com.bms.central_api_v1.models.Theather;
 import com.bms.central_api_v1.requestbody.CreateTheatherRB;
 import com.bms.central_api_v1.requestbody.CreateUserRB;
+import com.bms.central_api_v1.responsebody.AdminsResponseBody;
 import com.bms.central_api_v1.util.Mapper;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -17,6 +18,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.net.URI;
 import java.util.HashMap;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -58,5 +60,12 @@ public class DBAPI extends RestAPI  {
         String endPoint = "/theather/create";
         Object resp = this.makePostCall(baseUrl, endPoint, theather, new HashMap<>());
         return modelMapper.map(resp, Theather.class);
+    }
+
+    public List<AppUser> callGetAllAdminsEndpoint(){
+        String endPoint = "/user/admins";
+        Object resp = this.makeGetCall(baseUrl, endPoint, new HashMap<>());
+        AdminsResponseBody allAdmins = modelMapper.map(resp, AdminsResponseBody.class);
+        return allAdmins.getAdmins();
     }
 }
