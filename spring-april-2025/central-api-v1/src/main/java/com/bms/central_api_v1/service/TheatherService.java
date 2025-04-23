@@ -3,10 +3,12 @@ package com.bms.central_api_v1.service;
 import com.bms.central_api_v1.exception.UnAuthorizedException;
 import com.bms.central_api_v1.integration.DBAPI;
 import com.bms.central_api_v1.integration.NotificationAPI;
+import com.bms.central_api_v1.integration.RabbitMQIntg;
 import com.bms.central_api_v1.models.AppUser;
 import com.bms.central_api_v1.models.Theather;
 import com.bms.central_api_v1.requestbody.CreateTheatherNotificationRB;
 import com.bms.central_api_v1.requestbody.CreateTheatherRB;
+import com.bms.central_api_v1.requestbody.NotificationMessage;
 import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,13 +28,20 @@ public class TheatherService {
     @Autowired
     NotificationAPI notificationAPI;
 
+    @Autowired
+    RabbitMQIntg rabbitMQIntg;
+
     public void notifyAllAdminsRegardingnewTheatherReq(List<AppUser> admins, Theather theather){
         for(AppUser admin : admins){
             // we need to call notification api endpoint regarding theather request
             CreateTheatherNotificationRB theatherNotificationRB = new CreateTheatherNotificationRB();
             theatherNotificationRB.setTheather(theather);
             theatherNotificationRB.setAdmin(admin);
-            notificationAPI.callNotifyAdminForTheatherRequestEndpoint(theatherNotificationRB);
+            NotificationMessage notificationMessage = new NotificationMessage();
+            notificationMessage.setMessageType("create_theather");
+            notificationMessage.setPayload(theatherNotificationRB);
+            rabbitMQIntg.insertMessageToQueue(notificationMessage);
+            //notificationAPI.callNotifyAdminForTheatherRequestEndpoint(theatherNotificationRB);
         }
     }
 
