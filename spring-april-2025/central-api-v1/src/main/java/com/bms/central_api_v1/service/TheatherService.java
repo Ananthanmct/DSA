@@ -1,6 +1,7 @@
 package com.bms.central_api_v1.service;
 
 import com.bms.central_api_v1.exception.UnAuthorizedException;
+import com.bms.central_api_v1.integration.AuthAPI;
 import com.bms.central_api_v1.integration.DBAPI;
 import com.bms.central_api_v1.integration.NotificationAPI;
 import com.bms.central_api_v1.integration.RabbitMQIntg;
@@ -9,6 +10,7 @@ import com.bms.central_api_v1.models.Theather;
 import com.bms.central_api_v1.requestbody.CreateTheatherNotificationRB;
 import com.bms.central_api_v1.requestbody.CreateTheatherRB;
 import com.bms.central_api_v1.requestbody.NotificationMessage;
+import com.bms.central_api_v1.requestbody.SuccessResponseBody;
 import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -31,6 +33,7 @@ public class TheatherService {
     @Autowired
     RabbitMQIntg rabbitMQIntg;
 
+
     public void notifyAllAdminsRegardingnewTheatherReq(List<AppUser> admins, Theather theather){
         for(AppUser admin : admins){
             // we need to call notification api endpoint regarding theather request
@@ -46,7 +49,9 @@ public class TheatherService {
     }
 
     public Theather raiseCreateTheatherRequest(CreateTheatherRB theatherRB,
-                                               UUID theatherOwnerId) throws UnAuthorizedException{
+                                               UUID theatherOwnerId,
+                                               String Authorization) throws UnAuthorizedException{
+
         boolean isTheatherOwner = userService.isTheatherOwner(theatherOwnerId);
         if (isTheatherOwner == false){
             throw new UnAuthorizedException(

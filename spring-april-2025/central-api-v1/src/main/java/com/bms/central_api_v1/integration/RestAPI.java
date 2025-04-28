@@ -1,6 +1,7 @@
 package com.bms.central_api_v1.integration;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
@@ -47,10 +48,20 @@ public abstract class RestAPI {
         String url = apiBaseUrl + apiEndPoint;
         url = this.addQueryParams(url, queryParams);
         RequestEntity requestEntity = RequestEntity.get(url).build();
-        //RestTemplate restTemplate = new RestTemplate();
         ResponseEntity<Object> response = restTemplate.exchange(url, HttpMethod.GET, requestEntity, Object.class);
         return response.getBody();
     }
+
+    public Object makeGetCall(String apiBaseUrl, String apiEndPoint, Map<String, String> queryParams, String token){
+        String url = apiBaseUrl + apiEndPoint;
+        url = this.addQueryParams(url, queryParams);
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Authorization", token);
+        RequestEntity requestEntity = RequestEntity.get(url).headers(headers).build();
+        ResponseEntity<Object> response = restTemplate.exchange(url, HttpMethod.GET, requestEntity, Object.class);
+        return response.getBody();
+    }
+
     public Object makePutCall(String apiBaseUrl, String apiEndPoint, Object requestBody, Map<String, String> queryParams){
         String url = apiBaseUrl + apiEndPoint;
         url = this.addQueryParams(url, queryParams);

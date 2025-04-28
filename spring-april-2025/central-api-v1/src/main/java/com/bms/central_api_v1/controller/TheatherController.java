@@ -5,6 +5,7 @@ import com.bms.central_api_v1.exception.UserNotFoundException;
 import com.bms.central_api_v1.models.Theather;
 import com.bms.central_api_v1.requestbody.CreateTheatherRB;
 import com.bms.central_api_v1.responsebody.GeneralMessageResponse;
+import com.bms.central_api_v1.service.AuthService;
 import com.bms.central_api_v1.service.TheatherService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,11 +21,16 @@ public class TheatherController {
     @Autowired
     TheatherService theatherService;
 
+    @Autowired
+    AuthService authService;
+
     @PostMapping("/register")
     public ResponseEntity registerTheather(@RequestBody CreateTheatherRB theatherRB,
-                                           @RequestParam UUID ownerId){
+                                           @RequestParam UUID ownerId,
+                                           @RequestHeader String Authorization){
         try{
-            Theather theather = theatherService.raiseCreateTheatherRequest(theatherRB, ownerId);
+            authService.verifyToken(Authorization);
+            Theather theather = theatherService.raiseCreateTheatherRequest(theatherRB, ownerId, Authorization);
             return new ResponseEntity(theather, HttpStatus.CREATED);
         }catch (UnAuthorizedException e){
             GeneralMessageResponse message = new GeneralMessageResponse();
