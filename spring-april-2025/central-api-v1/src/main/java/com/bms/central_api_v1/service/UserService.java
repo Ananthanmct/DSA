@@ -2,6 +2,7 @@ package com.bms.central_api_v1.service;
 
 import com.bms.central_api_v1.enums.UserType;
 import com.bms.central_api_v1.exception.UserNotFoundException;
+import com.bms.central_api_v1.integration.AuthAPI;
 import com.bms.central_api_v1.integration.DBAPI;
 import com.bms.central_api_v1.models.AppUser;
 import com.bms.central_api_v1.requestbody.CreateUserRB;
@@ -19,10 +20,16 @@ public class UserService {
     @Autowired
     DBAPI dbapi;
 
+    @Autowired
+    AuthAPI authAPI;
+
+
+
     public Object registerUser(CreateUserRB userRB){
         // Before hitting db api user service will create request for create user endpoint of dbapi
         log.info("Recieved call from controller to service for request body : " + userRB.toString());
-        return dbapi.callCreateUserEndpoint(userRB);
+        AppUser user = dbapi.callCreateUserEndpoint(userRB);
+        return authAPI.callGenerateTokenEndpoint(user.getEmail(), user.getPassword());
     }
 
     public AppUser getUserById(UUID userId){
