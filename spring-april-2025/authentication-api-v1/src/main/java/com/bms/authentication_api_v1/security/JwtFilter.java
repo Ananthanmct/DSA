@@ -18,6 +18,10 @@ import java.util.Collections;
 @Component
 public class JwtFilter extends OncePerRequestFilter {
 
+
+    // /verify-token -> protected
+    // /generate-token -> not protected
+
     @Autowired
     AuthService authService;
 

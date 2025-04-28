@@ -1,6 +1,7 @@
 package com.bms.authentication_api_v1.Controller;
 
 import com.bms.authentication_api_v1.Service.AuthService;
+import com.bms.authentication_api_v1.responsebody.SuccessResponseBody;
 import com.bms.authentication_api_v1.responsebody.TokenResponseBody;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -24,5 +25,15 @@ public class AuthController {
         TokenResponseBody response = new TokenResponseBody();
         response.setToken(jwtToken);
         return new ResponseEntity(response, HttpStatus.OK);
+    }
+
+
+    @GetMapping("/verify-token")
+    public ResponseEntity verifyToken(){
+
+        SuccessResponseBody successRB = new SuccessResponseBody();
+        successRB.setStatus("Success");
+        return new ResponseEntity(successRB, HttpStatus.OK);
+
     }
 }
