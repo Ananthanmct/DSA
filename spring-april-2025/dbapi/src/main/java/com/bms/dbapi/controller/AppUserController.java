@@ -20,6 +20,13 @@ public class AppUserController {
     @Autowired
     AppUserRepository appUserRepository;
 
+    @GetMapping("/email/{emailId}")
+    public ResponseEntity getUserByEmail(@PathVariable String emailId){
+        AppUser user = appUserRepository.findByEmail(emailId);
+        return new ResponseEntity(user, HttpStatus.OK);
+    }
+
+
     @PostMapping("/create")
     public ResponseEntity createUser(@RequestBody AppUser user){
         appUserRepository.save(user);

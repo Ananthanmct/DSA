@@ -5,10 +5,9 @@ import com.bms.dbapi.repository.TheatherRepositorty;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/v1/db/theather")
@@ -22,4 +21,17 @@ public class TheatherController {
         theatherRepositorty.save(theather);
         return new ResponseEntity(theather, HttpStatus.CREATED);
     }
+
+    @GetMapping("/{theatherId}")
+    public ResponseEntity getTheatherById(@PathVariable UUID theatherId){
+        Theather theather = theatherRepositorty.findById(theatherId).orElse(null);
+        return new ResponseEntity(theather, HttpStatus.OK);
+    }
+
+    @PutMapping("/update")
+    public ResponseEntity updateTheather(@RequestBody Theather theather){
+        theatherRepositorty.save(theather);
+        return new ResponseEntity(theather, HttpStatus.OK);
+    }
+
 }

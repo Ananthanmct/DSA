@@ -13,4 +13,6 @@ public interface AppUserRepository extends JpaRepository<AppUser, UUID> {
 
     @Query(value = "select * from users where user_type='SYSTEM_ADMIN'", nativeQuery = true)
     public List<AppUser> getAllAdmins();
+
+    public AppUser findByEmail(String email);
 }
