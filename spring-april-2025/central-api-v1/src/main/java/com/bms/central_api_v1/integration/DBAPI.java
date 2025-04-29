@@ -68,4 +68,17 @@ public class DBAPI extends RestAPI  {
         AdminsResponseBody allAdmins = modelMapper.map(resp, AdminsResponseBody.class);
         return allAdmins.getAdmins();
     }
+
+    public Theather callGetTheatherById(UUID theatherId){
+        String endPoint = "/theather/" + theatherId.toString();
+        Object resp = this.makeGetCall(baseUrl, endPoint, new HashMap<>());
+        return modelMapper.map(resp, Theather.class);
+    }
+
+
+    public Theather callUpdateTheatherEndPoint(Theather theather){
+        String endPoint = "/theather/update";
+        Object resp  =this.makePutCall(baseUrl, endPoint, theather, new HashMap<>());
+        return modelMapper.map(resp, Theather.class);
+    }
 }

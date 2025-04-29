@@ -46,4 +46,16 @@ public class TheatherController {
             return new ResponseEntity(message, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+
+    @PutMapping("/approve/{theatherId}/{adminId}/{token}")
+    public ResponseEntity approveTheatherRequest(@PathVariable UUID theatherId,
+                                                 @PathVariable UUID adminId,
+                                                 @PathVariable String token){
+        try{
+            String bearerToken = "Bearer " + token;
+            authService.verifyToken(bearerToken);
+            // call theather service
+        }
+    }
 }
