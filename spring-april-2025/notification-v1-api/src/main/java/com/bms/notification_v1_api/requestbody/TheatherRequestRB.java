@@ -15,4 +15,5 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class TheatherRequestRB {
     Theather theather;
     AppUser admin;
+    String token;
 }

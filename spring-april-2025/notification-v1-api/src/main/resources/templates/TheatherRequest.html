@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <style>
         body {
@@ -72,7 +72,9 @@
 
     <p>Please take an action:</p>
 
-    <a href="${approveUrl}" class="button">Approve</a>
+    <form th:action="@{${acceptEndpoint}}" method="get">
+        <button type="submit" class="btn accept-btn">Accept Order</button>
+    </form>
     <a href="${rejectUrl}" class="button reject">Reject</a>
 
     <div class="footer">

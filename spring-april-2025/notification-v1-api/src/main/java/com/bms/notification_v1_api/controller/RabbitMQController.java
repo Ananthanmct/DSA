@@ -1,5 +1,6 @@
 package com.bms.notification_v1_api.controller;
 
+import com.bms.notification_v1_api.requestbody.AcceptTheatherRequestBody;
 import com.bms.notification_v1_api.requestbody.NotificationMessage;
 import com.bms.notification_v1_api.requestbody.TheatherRequestRB;
 import com.bms.notification_v1_api.service.TheatherMailService;
@@ -28,9 +29,13 @@ public class RabbitMQController {
             theatherMailService.notifyAdminForCreateTheatherRequest(theatherRequestRB);
             // we to map the payload to requested type
         }else if(messageType.equals("create_user")){
-
         }else if(messageType.equals("notify_user_bill")){
-
+        }else if(messageType.equals("THEATHER_ACCEPTANCE")){
+            Object payload = notificationMessage.getPayload();
+            // we need to convert payload to desired request body
+            AcceptTheatherRequestBody rb = mapper.map(payload, AcceptTheatherRequestBody.class);
+            // service
+            theatherMailService.sendTheatherAcceptanceMail(rb);
         }
     }
 
