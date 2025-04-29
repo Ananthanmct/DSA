@@ -48,7 +48,7 @@ public class TheatherController {
     }
 
 
-    @PutMapping("/approve/{theatherId}/{adminId}/{token}")
+    @GetMapping("/approve/{theatherId}/{adminId}/{token}")
     public ResponseEntity approveTheatherRequest(@PathVariable UUID theatherId,
                                                  @PathVariable UUID adminId,
                                                  @PathVariable String token){
@@ -56,6 +56,11 @@ public class TheatherController {
             String bearerToken = "Bearer " + token;
             authService.verifyToken(bearerToken);
             // call theather service
+            theatherService.acceptTheatherRequest(adminId, theatherId);
+            return new ResponseEntity(HttpStatus.OK);
+        }catch (Exception e){
+            GeneralMessageResponse messageResponse = new GeneralMessageResponse(e.getMessage());
+            return  new ResponseEntity(messageResponse, HttpStatus.UNAUTHORIZED);
         }
     }
 }

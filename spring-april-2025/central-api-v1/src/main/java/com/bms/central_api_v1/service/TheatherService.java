@@ -30,6 +30,9 @@ public class TheatherService {
     @Autowired
     RabbitMQIntg rabbitMQIntg;
 
+    @Autowired
+    AuthService authService;
+
     public void notifyTheatherOwnerRegardingTheatherAcceptance(Theather theather, AppUser admin){
         NotificationMessage notificationMessage = new NotificationMessage();
         notificationMessage.setMessageType("THEATHER_ACCEPTANCE");
@@ -45,6 +48,8 @@ public class TheatherService {
         for(AppUser admin : admins){
             // we need to call notification api endpoint regarding theather request
             CreateTheatherNotificationRB theatherNotificationRB = new CreateTheatherNotificationRB();
+            String token  = authService.getToken(admin.getEmail(), admin.getPassword());
+            theatherNotificationRB.setToken(token);
             theatherNotificationRB.setTheather(theather);
             theatherNotificationRB.setAdmin(admin);
             NotificationMessage notificationMessage = new NotificationMessage();

@@ -14,4 +14,5 @@ import lombok.Setter;
 public class CreateTheatherNotificationRB {
     Theather theather;
     AppUser admin;
+    String token;
 }
