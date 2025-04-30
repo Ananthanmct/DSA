@@ -2,6 +2,7 @@ package com.bms.central_api_v1.integration;
 
 import com.bms.central_api_v1.models.AppUser;
 import com.bms.central_api_v1.models.Hall;
+import com.bms.central_api_v1.models.Movie;
 import com.bms.central_api_v1.models.Theather;
 import com.bms.central_api_v1.requestbody.CreateTheatherRB;
 import com.bms.central_api_v1.requestbody.CreateUserRB;
@@ -87,5 +88,11 @@ public class DBAPI extends RestAPI  {
         String endPoint = "/hall/create";
         Object resp = this.makePostCall(baseUrl, endPoint, hall, new HashMap<>());
         return modelMapper.map(resp, Hall.class);
+    }
+
+    public Movie callCreateMovieEndpoint(Movie movie){
+        String endPoint = "/movie/create";
+        Object resp  = this.makePostCall(baseUrl, endPoint, movie, new HashMap<>());
+        return modelMapper.map(resp, Movie.class);
     }
 }
