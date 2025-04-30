@@ -33,6 +33,10 @@ public class TheatherService {
     @Autowired
     AuthService authService;
 
+    public Theather getTheatherById(UUID theatherId){
+        return dbapi.callGetTheatherById(theatherId);
+    }
+
     public void notifyTheatherOwnerRegardingTheatherAcceptance(Theather theather, AppUser admin){
         NotificationMessage notificationMessage = new NotificationMessage();
         notificationMessage.setMessageType("THEATHER_ACCEPTANCE");
@@ -90,6 +94,7 @@ public class TheatherService {
     public void acceptTheatherRequest(UUID adminId, UUID theatherId ){
         // Validate that we are getting correct adminId and theatherId
         Theather theather = dbapi.callGetTheatherById(theatherId);
+
         theather.setStatus("ACTIVE");
         // we have updated status theather then we need to call db api to update the changes in the database
         theather = dbapi.callUpdateTheatherEndPoint(theather);
