@@ -16,6 +16,6 @@ public class BookedSeat {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     UUID id;
-    UUID showId;
-    int seatNumber;
+    UUID showId; // 1
+    int seatNumber; // 1
 }

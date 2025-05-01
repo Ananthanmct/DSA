@@ -24,4 +24,5 @@ public class Show {
     Movie movie;
     Long startTime;
     Long endTime;
+    Double price;
 }

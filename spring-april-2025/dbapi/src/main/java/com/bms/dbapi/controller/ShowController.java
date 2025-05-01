@@ -31,4 +31,10 @@ public class ShowController {
         showsByHallResposneBody.setShows(shows);
         return new ResponseEntity(showsByHallResposneBody, HttpStatus.OK);
     }
+
+    @GetMapping("/{showId}")
+    public ResponseEntity getShowByShowId(@PathVariable UUID showId){
+        Show show = showRepository.findById(showId).orElse(null);
+        return new ResponseEntity(show, HttpStatus.OK);
+    }
 }

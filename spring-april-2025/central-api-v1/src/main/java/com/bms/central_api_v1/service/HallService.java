@@ -20,6 +20,10 @@ public class HallService {
     @Autowired
     DBAPI dbapi;
 
+    public Hall getHallById(UUID hallId){
+        return dbapi.callGetHallByIdEndpoint(hallId);
+    }
+
     public Hall createHall(UUID ownerId, UUID theatherId,
                            CreateHallRB hallRB){
         Theather theather  = theatherService.getTheatherById(theatherId);

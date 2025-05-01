@@ -19,6 +19,10 @@ public class MovieService {
     @Autowired
     DBAPI dbapi;
 
+    public Movie getMovieById(UUID movieId){
+        return dbapi.callGetMovieByIdEndpoint(movieId);
+    }
+
     public Movie createMovie(CreateMovieRB movieRB, UUID movieOwnerId){
         // You need to do some validation that this movieOwnerId is having userType as movie owner or not
         AppUser movieOwner = userService.getUserById(movieOwnerId);
