@@ -27,7 +27,7 @@ public class Employee {
     String password;
     @ManyToOne
     Organization organization;
-    @ManyToOne
+    @OneToMany
     List<Role> roles;
     LocalDateTime createdAt;
     LocalDateTime updatedAt;

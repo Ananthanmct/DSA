@@ -1,8 +1,6 @@
 package com.ticket_managemnt_system.database_api.models;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -10,6 +8,8 @@ import java.util.UUID;
 @Entity
 @Table(name = "comments")
 public class Comment {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     UUID id;
     String commentDescription;
     @ManyToOne
