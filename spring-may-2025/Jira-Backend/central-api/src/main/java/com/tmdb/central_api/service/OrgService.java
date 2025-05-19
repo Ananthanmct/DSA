@@ -2,6 +2,7 @@ package com.tmdb.central_api.service;
 
 import com.tmdb.central_api.dto.OrgDetailDto;
 import com.tmdb.central_api.middleware.DbApiIntgeration;
+import com.tmdb.central_api.middleware.NotificationAPIConnector;
 import com.tmdb.central_api.models.Organization;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,6 +14,9 @@ public class OrgService {
 
     @Autowired
     DbApiIntgeration dbapiIntg;
+
+    @Autowired
+    NotificationAPIConnector notificationAPIConnector;
 
     public Object createOrganization(OrgDetailDto orgDetailDto){
         // OrgDetailDTO
@@ -26,11 +30,13 @@ public class OrgService {
         organization.setPassword(orgDetailDto.getPassword());
         organization.setWebsiteUrl(orgDetailDto.getWebsiteUrl());
         organization.setAddress(orgDetailDto.getAddress());
-        organization.setCompanySize(organization.getCompanySize());
+        organization.setCompanySize(orgDetailDto.getCompanySize());
         organization.setCreatedAt(LocalDateTime.now());
         organization.setUpdatedAt(LocalDateTime.now());
         // We need to call database-api create organization endpoint
         // That endpoint will save organization details in database.
-        return dbapiIntg.callCreateOrganizationEndpoint(organization);
+        Object org =  dbapiIntg.callCreateOrganizationEndpoint(organization);
+        notificationAPIConnector.callOrgCreateNotificationEndpoint(organization);
+        return org;
     }
 }
