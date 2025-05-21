@@ -1,13 +1,20 @@
 package com.tmdb.auth_api.security;
 
+import com.tmdb.auth_api.connector.DBAPI;
+import com.tmdb.auth_api.models.Employee;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 import java.util.Date;
 
+@Component
 public class JwtUtil {
 
+    @Autowired
+    DBAPI dbapi;
 
     @Value("${auth.secret.password}")
     String secretPassword;
@@ -39,11 +46,11 @@ public class JwtUtil {
         String credentials = this.decryptToken(token);
         String email = credentials.split(":")[0];
         String password = credentials.split(":")[1];
-        AppUser user  = dbapi.callGetUserByEmailEndpoint(email);
-        if(user == null){
+        Employee emp  = dbapi.callGetEmployeeByEmailEndpoint(email);
+        if(emp == null){
             return false;
         }
-        if(user.getPassword().equals(password)){
+        if(emp.getPassword().equals(password)){
             return true;
         }
         return false;

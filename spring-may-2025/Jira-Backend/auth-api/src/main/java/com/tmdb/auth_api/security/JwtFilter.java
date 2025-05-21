@@ -1,6 +1,5 @@
 package com.tmdb.auth_api.security;
 
-import com.bms.authentication_api_v1.Service.AuthService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
