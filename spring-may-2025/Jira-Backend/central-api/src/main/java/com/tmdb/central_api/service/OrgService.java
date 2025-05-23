@@ -3,7 +3,10 @@ package com.tmdb.central_api.service;
 import com.tmdb.central_api.dto.OrgDetailDto;
 import com.tmdb.central_api.middleware.DbApiIntgeration;
 import com.tmdb.central_api.middleware.NotificationAPIConnector;
+import com.tmdb.central_api.models.Employee;
 import com.tmdb.central_api.models.Organization;
+import com.tmdb.central_api.models.Role;
+import com.tmdb.central_api.util.MappingUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,24 +21,25 @@ public class OrgService {
     @Autowired
     NotificationAPIConnector notificationAPIConnector;
 
+    @Autowired
+    MappingUtil mapper;
+
+    @Autowired
+    RoleService roleService;
+
+    @Autowired
+    EmployeeService employeeService;
+
     public Object createOrganization(OrgDetailDto orgDetailDto){
         // OrgDetailDTO
         // We need to map these details to actual organization model object.
-
-        Organization organization = new Organization();
-        organization.setName(orgDetailDto.getName());
-        organization.setRegisteredName(orgDetailDto.getRegisteredName());
-        organization.setAdminEmail(orgDetailDto.getAdminEmail());
-        organization.setAdminName(orgDetailDto.getAdminName());
-        organization.setPassword(orgDetailDto.getPassword());
-        organization.setWebsiteUrl(orgDetailDto.getWebsiteUrl());
-        organization.setAddress(orgDetailDto.getAddress());
-        organization.setCompanySize(orgDetailDto.getCompanySize());
-        organization.setCreatedAt(LocalDateTime.now());
-        organization.setUpdatedAt(LocalDateTime.now());
-        // We need to call database-api create organization endpoint
-        // That endpoint will save organization details in database.
-        Object org =  dbapiIntg.callCreateOrganizationEndpoint(organization);
+        Organization organization = mapper.mapOrgDetailDtoToOrganization(orgDetailDto);
+        Organization org =  dbapiIntg.callCreateOrganizationEndpoint(organization);
+        // When Org will get created then we should create default admin role for the org
+        Role role  = roleService.createDefaultAdminRole(org);
+        // When role got created inside the system lets create the first employee of organization i.e. System Admin
+        Employee employee = mapper.mapOrgAdminDetailsToEmployee(org, role);
+        employee = employeeService.saveEmployeeToDB(employee);
         notificationAPIConnector.callOrgCreateNotificationEndpoint(organization);
         return org;
     }
