@@ -16,8 +16,9 @@ public class UserService {
        return user;
     }
 
-    public User createNewUser(){
-
+    public User createNewUser(String name){
+        User user =  userDB.createNewUser(name);
+        return user;
     }
 
 }
