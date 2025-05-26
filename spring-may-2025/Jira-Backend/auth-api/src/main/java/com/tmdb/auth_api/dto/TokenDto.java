@@ -4,9 +4,9 @@ import lombok.*;
 
 @Getter
 @Setter
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @ToString
-public class StatusDto {
-    String userDetail;
+public class TokenDto {
+    boolean isValid;
 }
