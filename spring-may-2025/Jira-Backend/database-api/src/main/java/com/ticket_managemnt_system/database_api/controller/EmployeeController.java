@@ -42,7 +42,7 @@ public class EmployeeController {
     }
 
 
-    @GetMapping("/email/{emailId}")
+    @GetMapping("/email/{email}")
     public ResponseEntity getEmployeeByEmail(@PathVariable String email){
         Employee emp  = employeeRepository.findByEmail(email);
         return new ResponseEntity(emp, HttpStatus.OK);
