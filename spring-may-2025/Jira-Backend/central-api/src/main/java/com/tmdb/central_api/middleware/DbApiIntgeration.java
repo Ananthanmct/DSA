@@ -57,5 +57,13 @@ public class DbApiIntgeration {
         return resp.getBody();
     }
 
+    public Employee callGetEmployeeByEmailEndpoint(String email){
+        String url = baseUrl + "/employee/email/" + email;
+        RequestEntity request = RequestEntity.get(url).build();
+        RestTemplate restTemplate = new RestTemplate();
+        ResponseEntity<Employee> resp =restTemplate.exchange(url, HttpMethod.GET, request, Employee.class);
+        return resp.getBody();
+    }
+
 
 }

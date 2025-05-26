@@ -1,5 +1,6 @@
 package com.tmdb.central_api.service;
 
+import com.tmdb.central_api.dto.CreateRoleDto;
 import com.tmdb.central_api.middleware.DbApiIntgeration;
 import com.tmdb.central_api.models.Operation;
 import com.tmdb.central_api.models.Organization;
@@ -28,6 +29,11 @@ public class RoleService {
         List<Operation> oprs = operationService.getAllOperations();
         role.setOperations(oprs);
         return this.saveRoleToDB(role);
+    }
+
+    public Role createRole(CreateRoleDto createRoleDto, String Authorization){
+        // We need to verify whatever token we are recieving that token will belong to an employee.
+        // that employee is having access to create role or not.
     }
 
     public Role saveRoleToDB(Role role){
