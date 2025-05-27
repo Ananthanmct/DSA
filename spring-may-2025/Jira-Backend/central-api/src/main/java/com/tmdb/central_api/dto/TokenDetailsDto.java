@@ -7,9 +7,6 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class UserDetailDto {
-    String email;
-    String password;
-    String role;
-    String orgId;
+public class TokenDetailsDto {
+    String userDetail;
 }

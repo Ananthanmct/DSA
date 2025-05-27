@@ -11,4 +11,5 @@ public class UserDetailDto {
     String email;
     String password;
     String role;
+    String orgId;
 }

@@ -20,11 +20,11 @@ public class AuthService {
     DBAPI dbapi;
 
     public boolean isValidAccess(String token,
-                                 UUID orgId,
                                  String oprName){
         String information = jwtUtil.decryptToken(token);
         String [] infoArr = information.split(":");
         String role = infoArr[2];
+        UUID orgId = UUID.fromString(infoArr[3]);
         Role roleDb = dbapi.callGetRoleByOrgIdEndpoint(orgId, role);
         List<Operation> operations = roleDb.getOperations();
         for(Operation opr: operations){

@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
+import java.util.UUID;
 
 @Component
 public class DbApiIntgeration {
@@ -62,6 +63,14 @@ public class DbApiIntgeration {
         RequestEntity request = RequestEntity.get(url).build();
         RestTemplate restTemplate = new RestTemplate();
         ResponseEntity<Employee> resp =restTemplate.exchange(url, HttpMethod.GET, request, Employee.class);
+        return resp.getBody();
+    }
+
+    public Organization callGetOrganizationById(UUID orgId){
+        String url = baseUrl + "/organization/" + orgId.toString();
+        RequestEntity request = RequestEntity.get(url).build();
+        RestTemplate restTemplate = new RestTemplate();
+        ResponseEntity<Organization> resp = restTemplate.exchange(url, HttpMethod.GET, request, Organization.class);
         return resp.getBody();
     }
 

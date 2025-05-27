@@ -5,6 +5,8 @@ import com.tmdb.central_api.models.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 @Service
@@ -15,6 +17,18 @@ public class OperationService {
 
     public List<Operation> getAllOperations(){
         return dbApiIntgeration.callGetAllOperationEndpoint();
+    }
+
+    public List<Operation> getAllOperationsByOperationName(List<String> oprNameList){
+       List<Operation> operations = this.getAllOperations();
+       List<Operation> res = new ArrayList<>();
+       HashSet<String> oprSet = new HashSet<>(oprNameList);
+       for(Operation opr : operations){
+           if(oprSet.contains(opr.getName())){
+               res.add(opr);
+           }
+       }
+       return res;
     }
 
 }

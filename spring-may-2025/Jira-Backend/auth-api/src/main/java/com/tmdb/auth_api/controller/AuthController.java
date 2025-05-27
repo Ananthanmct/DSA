@@ -24,7 +24,7 @@ public class AuthController {
 
     @PutMapping("/get")
     public ResponseEntity generateToken(@RequestBody UserDetailDto userDetails){
-        String token = jwtUtil.generateToken(userDetails.getEmail(), userDetails.getPassword(), userDetails.getRole());
+        String token = jwtUtil.generateToken(userDetails.getEmail(), userDetails.getPassword(), userDetails.getRole(), userDetails.getOrgId());
         return new ResponseEntity(token, HttpStatus.OK);
     }
 
@@ -37,12 +37,11 @@ public class AuthController {
         return new ResponseEntity(statusDto, HttpStatus.OK);
     }
 
-    @GetMapping("/verify/operation/access")
-    public ResponseEntity verifyOperationAccess(@RequestParam String operationName,
-                                                @RequestParam UUID orgId,
+    @GetMapping("/verify/operation/access/{operationName}")
+    public ResponseEntity verifyOperationAccess(@PathVariable String operationName,
                                                 @RequestHeader String Authorization){
         String token = Authorization.substring(7);
-        boolean result = authService.isValidAccess(token, orgId, operationName);
+        boolean result = authService.isValidAccess(token, operationName);
         TokenDto statusDto = new TokenDto();
         statusDto.setValid(result);
         if(result == false){

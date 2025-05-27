@@ -42,6 +42,7 @@ public class EmployeeService {
             userDetailDto.setEmail(employee.getEmail());
             userDetailDto.setPassword(employee.getPassword());
             userDetailDto.setRole(employee.getRoles().get(0).getName());
+            userDetailDto.setOrgId(employee.getOrganization().getId().toString());
             String token = authApiConnector.callGetJwtTokenEndpoint(userDetailDto);
             return token;
         }

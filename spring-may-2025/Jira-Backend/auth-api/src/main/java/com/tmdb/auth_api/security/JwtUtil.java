@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
+import java.util.UUID;
 
 @Component
 public class JwtUtil {
@@ -21,8 +22,8 @@ public class JwtUtil {
 
     Long expirationTime = 1000000L; // 10 mins
 
-    public String generateToken(String userId, String password, String role){ // email & password
-        String information = userId + ":" + password + ":" + role;
+    public String generateToken(String userId, String password, String role, String orgID){ // email & password
+        String information = userId + ":" + password + ":" + role + ":" + orgID;
         String jwtToken = Jwts.builder()
                 .setExpiration(new Date(System.currentTimeMillis() + expirationTime))
                 .setIssuedAt(new Date())

@@ -24,7 +24,7 @@ public class Role {
     String name;
     @ManyToOne
     Organization organization;
-    @OneToMany
+    @ManyToMany
     List<Operation> operations;
     LocalDateTime createdAt;
     LocalDateTime updatedAt;
