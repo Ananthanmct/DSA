@@ -27,4 +27,10 @@ public class RoleController {
         Role role = roleRepository.getRoleByOrgIdAndRoleName(orgId, roleName);
         return new ResponseEntity(role, HttpStatus.OK);
     }
+
+    @GetMapping("/{roleId}")
+    public ResponseEntity getRoleById(@PathVariable UUID roleId){
+        Role role = roleRepository.findById(roleId).orElse(null);
+        return new ResponseEntity(role, HttpStatus.OK);
+    }
 }

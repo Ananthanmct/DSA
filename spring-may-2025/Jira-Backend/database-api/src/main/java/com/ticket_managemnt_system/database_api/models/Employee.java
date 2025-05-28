@@ -29,6 +29,7 @@ public class Employee {
     Organization organization;
     @OneToMany
     List<Role> roles;
+    String status;
     LocalDateTime createdAt;
     LocalDateTime updatedAt;
 }

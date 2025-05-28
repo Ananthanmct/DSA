@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>You're Invited to Join [[${organizationName}]]</title>
+    <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f6f8fa;
+      color: #333333;
+      padding: 20px;
+    }
+    .container {
+      background-color: #ffffff;
+      padding: 30px;
+      border-radius: 10px;
+      max-width: 600px;
+      margin: auto;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    h2 {
+      color: #2e6da4;
+    }
+    .btn {
+      display: inline-block;
+      padding: 12px 20px;
+      margin: 10px 10px 10px 0;
+      font-size: 16px;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .accept-btn {
+      background-color: #28a745;
+    }
+    .reject-btn {
+      background-color: #dc3545;
+    }
+    .footer {
+      font-size: 12px;
+      color: #777;
+      margin-top: 20px;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+    <h2>You're Invited to Join [[${organizationName}]]</h2>
+    <p>Hi [[${firstName}]] [[${lastName}]],</p>
+    <p>
+        You have been invited to join the organization <strong>[[${organizationName}]]</strong> on our project management platform.
+    </p>
+    <p>
+        Please confirm your decision by clicking one of the buttons below:
+    </p>
+
+    <form th:action="@{${acceptUrl}}" method="get">
+        <button type="submit" class="btn accept-btn">Accept Invitation</button>
+    </form>
+
+    <form th:action="@{${rejectUrl}}" method="get">
+        <button type="submit" class="btn reject-btn">Reject Invitation</button>
+    </form>
+
+    <p>If you have any questions, feel free to contact our support team.</p>
+    <div class="footer">
+        &copy; [[${year}]] Your Company Name. All rights reserved.
+    </div>
+</div>
+</body>
+</html>

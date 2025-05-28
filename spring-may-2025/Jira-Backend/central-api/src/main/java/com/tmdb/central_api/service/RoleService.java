@@ -56,6 +56,10 @@ public class RoleService {
         return this.saveRoleToDB(role);
     }
 
+    public Role getRoleById(UUID roleId){
+        return dbApiIntgeration.callGetRoleById(roleId);
+    }
+
     public Organization getOrganizationById(UUID orgId){
         return  dbApiIntgeration.callGetOrganizationById(orgId);
     }

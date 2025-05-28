@@ -1,5 +1,6 @@
 package com.tmdb.central_api.util;
 
+import com.tmdb.central_api.dto.InviteEmployeeDto;
 import com.tmdb.central_api.dto.OrgDetailDto;
 import com.tmdb.central_api.models.Employee;
 import com.tmdb.central_api.models.Organization;
@@ -41,6 +42,24 @@ public class MappingUtil {
         organization.setCreatedAt(LocalDateTime.now());
         organization.setUpdatedAt(LocalDateTime.now());
         return organization;
+    }
+
+    public Employee mapInviteEmployeeDetailsToEmployee(InviteEmployeeDto employeeDetails,
+                                                       Organization organization,
+                                                       Role role){
+        Employee employee = new Employee();
+        employee.setFirstName(employeeDetails.getFirstName());
+        employee.setLastName(employeeDetails.getLastName());
+        employee.setEmail(employeeDetails.getEmail());
+        employee.setPassword(employee.getPassword());
+        employee.setOrganization(organization);
+        employee.setUpdatedAt(LocalDateTime.now());
+        employee.setCreatedAt(LocalDateTime.now());
+        employee.setStatus("INACTIVE");
+        ArrayList<Role> roles = new ArrayList<>();
+        roles.add(role);
+        employee.setRoles(roles);
+        return employee;
     }
 
 }

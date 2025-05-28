@@ -1,6 +1,5 @@
-package com.tmdb.central_api.models;
+package com.tmdb.notification_api.model;
 
-import jakarta.annotation.security.DenyAll;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -20,7 +19,6 @@ public class Employee {
     String password;
     String status;
     Organization organization;
-    List<Role> roles;
     LocalDateTime createdAt;
     LocalDateTime updatedAt;
 }

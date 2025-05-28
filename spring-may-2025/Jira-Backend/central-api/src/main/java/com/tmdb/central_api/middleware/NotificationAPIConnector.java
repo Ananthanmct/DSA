@@ -1,6 +1,8 @@
 package com.tmdb.central_api.middleware;
 
+import com.tmdb.central_api.models.Employee;
 import com.tmdb.central_api.models.Organization;
+import com.tmdb.central_api.service.EmployeeService;
 import org.apache.coyote.Response;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.RequestEntity;
@@ -22,6 +24,15 @@ public class NotificationAPIConnector {
                 .body(organization);
         RestTemplate restTemplate = new RestTemplate();
         ResponseEntity<Object> resp = restTemplate.exchange(url, HttpMethod.PUT, request, Object.class);
+    }
+
+    public void callInviteEmployeeNotificationEndpoint(Employee employee){
+        String url = baseUrl + "/emp/invite";
+        RequestEntity request = RequestEntity
+                .put(url)
+                .body(employee);
+        RestTemplate restTemplate = new RestTemplate();
+        ResponseEntity<Employee> resp = restTemplate.exchange(url, HttpMethod.PUT, request, Employee.class);
     }
 
 }

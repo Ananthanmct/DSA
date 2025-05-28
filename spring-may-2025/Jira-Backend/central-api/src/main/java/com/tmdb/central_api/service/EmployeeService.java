@@ -1,13 +1,21 @@
 package com.tmdb.central_api.service;
 
+import com.tmdb.central_api.dto.InviteEmployeeDto;
 import com.tmdb.central_api.dto.LoginDto;
 import com.tmdb.central_api.dto.UserDetailDto;
+import com.tmdb.central_api.exceptions.UnAuthorizedException;
 import com.tmdb.central_api.exceptions.WrongCredentialsException;
 import com.tmdb.central_api.middleware.AuthApiConnector;
 import com.tmdb.central_api.middleware.DbApiIntgeration;
+import com.tmdb.central_api.middleware.NotificationAPIConnector;
 import com.tmdb.central_api.models.Employee;
+import com.tmdb.central_api.models.Organization;
+import com.tmdb.central_api.models.Role;
+import com.tmdb.central_api.util.MappingUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.UUID;
 
 @Service
 public class EmployeeService {
@@ -16,7 +24,19 @@ public class EmployeeService {
     DbApiIntgeration dbApiIntgeration;
 
     @Autowired
+    RoleService roleService;
+
+    @Autowired
+    AuthService authService;
+
+    @Autowired
     AuthApiConnector authApiConnector;
+
+    @Autowired
+    MappingUtil mappingUtil;
+
+    @Autowired
+    NotificationAPIConnector notificationAPIConnector;
 
 
 
@@ -47,5 +67,27 @@ public class EmployeeService {
             return token;
         }
         throw new WrongCredentialsException("Wrong Password entered");
+    }
+
+    public Employee inviteEmployeeToOrg(
+            InviteEmployeeDto employeeDetails,
+            String Authorization
+    ){
+        boolean authResp = authService.checkAccessAvailable(Authorization, "INVITE_EMPLOYEE");
+        if(authResp == false){
+            throw new UnAuthorizedException("Does not have access to invite employee");
+        }
+
+        // To map employeeDetails from EmployeeDto to Employee Model we will require organization object and Role object
+        UUID orgId = employeeDetails.getOrgId();
+        UUID roleId = employeeDetails.getRoles().get(0);
+        Organization org = roleService.getOrganizationById(orgId);
+        Role role = roleService.getRoleById(roleId);
+        Employee employee  = mappingUtil.mapInviteEmployeeDetailsToEmployee(employeeDetails, org, role);
+        employee = this.saveEmployeeToDB(employee);
+        // We have saved the employee object in db now we need to call notification api to notify employee
+        // that you are inviyed to join this org
+        notificationAPIConnector.callInviteEmployeeNotificationEndpoint(employee);
+        return employee;
     }
 }

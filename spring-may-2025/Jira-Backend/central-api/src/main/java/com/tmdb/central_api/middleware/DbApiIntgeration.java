@@ -74,5 +74,13 @@ public class DbApiIntgeration {
         return resp.getBody();
     }
 
+    public Role callGetRoleById(UUID roleId){
+        String url = baseUrl + "/role/" + roleId.toString();
+        RequestEntity request = RequestEntity.get(url).build();
+        RestTemplate restTemplate = new RestTemplate();
+        ResponseEntity<Role> resp = restTemplate.exchange(url, HttpMethod.GET, request, Role.class);
+        return resp.getBody();
+    }
+
 
 }
