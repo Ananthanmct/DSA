@@ -41,4 +41,12 @@ public class EmployeeController {
         Employee employee = employeeService.inviteEmployeeToOrg(employeeDetails, Authorization);
         return new ResponseEntity(employee, HttpStatus.CREATED);
     }
+
+
+    @GetMapping("/invite/accept/{token}")
+    public ResponseEntity acceptInvitation(@PathVariable String token){
+        Employee employee = employeeService.acceptInvitation(token);
+        return new ResponseEntity(employee, HttpStatus.OK);
+    }
+
 }

@@ -26,8 +26,8 @@ public class NotificationAPIConnector {
         ResponseEntity<Object> resp = restTemplate.exchange(url, HttpMethod.PUT, request, Object.class);
     }
 
-    public void callInviteEmployeeNotificationEndpoint(Employee employee){
-        String url = baseUrl + "/emp/invite";
+    public void callInviteEmployeeNotificationEndpoint(Employee employee, String token){
+        String url = baseUrl + "/emp/invite/" + token ;
         RequestEntity request = RequestEntity
                 .put(url)
                 .body(employee);

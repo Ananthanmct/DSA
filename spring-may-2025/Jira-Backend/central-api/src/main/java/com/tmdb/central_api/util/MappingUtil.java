@@ -51,7 +51,7 @@ public class MappingUtil {
         employee.setFirstName(employeeDetails.getFirstName());
         employee.setLastName(employeeDetails.getLastName());
         employee.setEmail(employeeDetails.getEmail());
-        employee.setPassword(employee.getPassword());
+        employee.setPassword(employeeDetails.getPassword());
         employee.setOrganization(organization);
         employee.setUpdatedAt(LocalDateTime.now());
         employee.setCreatedAt(LocalDateTime.now());

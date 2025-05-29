@@ -87,7 +87,22 @@ public class EmployeeService {
         employee = this.saveEmployeeToDB(employee);
         // We have saved the employee object in db now we need to call notification api to notify employee
         // that you are inviyed to join this org
-        notificationAPIConnector.callInviteEmployeeNotificationEndpoint(employee);
+        UserDetailDto userDetailDto = new UserDetailDto();
+        userDetailDto.setOrgId(org.getId().toString());
+        userDetailDto.setEmail(employee.getEmail());
+        userDetailDto.setPassword(employee.getPassword());
+        userDetailDto.setRole(role.getName());
+        String token  = authService.getJwtTokenByUserDetails(userDetailDto);
+        notificationAPIConnector.callInviteEmployeeNotificationEndpoint(employee, token);
+        return employee;
+    }
+
+
+    public Employee acceptInvitation(String token){
+        String email = authService.getEmailFromJwtToken(token);
+        Employee emp = dbApiIntgeration.callGetEmployeeByEmailEndpoint(email);
+        emp.setStatus("ACTIVE");
+        Employee employee = dbApiIntgeration.callSaveEmployeeEndpoint(emp);
         return employee;
     }
 }

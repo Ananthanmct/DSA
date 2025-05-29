@@ -2,6 +2,7 @@ package com.tmdb.notification_api.service;
 
 import com.tmdb.notification_api.model.Employee;
 import jakarta.mail.internet.MimeMessage;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
@@ -13,7 +14,10 @@ import java.util.Properties;
 
 @Service
 public class EmployeeService {
-    public void sendInvitationMail(Employee employee) throws Exception{
+
+    @Value("${central.api.base.url}")
+    String centralApiUrl;
+    public void sendInvitationMail(Employee employee, String token) throws Exception{
         JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
         mailSender.setHost("smtp.gmail.com");
         mailSender.setPort(587);
@@ -32,10 +36,11 @@ public class EmployeeService {
 
         // Thymeleaf context
         Context context = new Context();
+        String acceptEndpoint = centralApiUrl + "/emp/invite/accept/" + token;
         context.setVariable("organizationName", employee.getOrganization().getRegisteredName());
         context.setVariable("firstName", employee.getFirstName());
         context.setVariable("lastName", employee.getLastName());
-        context.setVariable("acceptUrl", "https://www.google.com/");
+        context.setVariable("acceptUrl", acceptEndpoint);
         context.setVariable("rejectUrl", "https://www.google.com/");
         context.setVariable("year", "2025");
 
