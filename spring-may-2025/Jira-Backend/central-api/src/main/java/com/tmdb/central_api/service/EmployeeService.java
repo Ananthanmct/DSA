@@ -80,6 +80,7 @@ public class EmployeeService {
 
         // To map employeeDetails from EmployeeDto to Employee Model we will require organization object and Role object
         UUID orgId = employeeDetails.getOrgId();
+
         UUID roleId = employeeDetails.getRoles().get(0);
         Organization org = roleService.getOrganizationById(orgId);
         Role role = roleService.getRoleById(roleId);

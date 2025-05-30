@@ -1,10 +1,7 @@
 package com.tmdb.central_api.middleware;
 
 import com.tmdb.central_api.dto.OperationListDto;
-import com.tmdb.central_api.models.Employee;
-import com.tmdb.central_api.models.Operation;
-import com.tmdb.central_api.models.Organization;
-import com.tmdb.central_api.models.Role;
+import com.tmdb.central_api.models.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.RequestEntity;
@@ -79,6 +76,14 @@ public class DbApiIntgeration {
         RequestEntity request = RequestEntity.get(url).build();
         RestTemplate restTemplate = new RestTemplate();
         ResponseEntity<Role> resp = restTemplate.exchange(url, HttpMethod.GET, request, Role.class);
+        return resp.getBody();
+    }
+
+    public Project callCreateProjectEndpoint(Project project){
+        String url = baseUrl + "/project/create";
+        RequestEntity request = RequestEntity.post(url).body(project);
+        RestTemplate restTemplate = new RestTemplate();
+        ResponseEntity<Project> resp = restTemplate.exchange(url, HttpMethod.POST, request, Project.class);
         return resp.getBody();
     }
 

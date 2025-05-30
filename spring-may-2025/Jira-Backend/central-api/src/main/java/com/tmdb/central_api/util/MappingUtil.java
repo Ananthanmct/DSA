@@ -1,9 +1,11 @@
 package com.tmdb.central_api.util;
 
+import com.tmdb.central_api.dto.CreateProjectDto;
 import com.tmdb.central_api.dto.InviteEmployeeDto;
 import com.tmdb.central_api.dto.OrgDetailDto;
 import com.tmdb.central_api.models.Employee;
 import com.tmdb.central_api.models.Organization;
+import com.tmdb.central_api.models.Project;
 import com.tmdb.central_api.models.Role;
 import org.springframework.stereotype.Component;
 
@@ -60,6 +62,20 @@ public class MappingUtil {
         roles.add(role);
         employee.setRoles(roles);
         return employee;
+    }
+
+    public Project createProjectObjectFromProjectDetailsDto(CreateProjectDto createProjectDto,
+                                                            Organization organization,
+                                                            Employee employee){
+        Project project = new Project();
+        project.setCreatedAt(LocalDateTime.now());
+        project.setUpdatedAt(LocalDateTime.now());
+        project.setDescription(createProjectDto.getDescription());
+        project.setOrganization(organization);
+        ArrayList<Employee> employees = new ArrayList<>();
+        employees.add(employee);
+        project.setEmployees(employees);
+        return project;
     }
 
 }

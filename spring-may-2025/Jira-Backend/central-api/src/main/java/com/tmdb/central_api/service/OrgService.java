@@ -45,5 +45,9 @@ public class OrgService {
         return org;
     }
 
+    public Organization getOrganizationById(UUID orgId){
+        return  dbapiIntg.callGetOrganizationById(orgId);
+    }
+
 
 }
