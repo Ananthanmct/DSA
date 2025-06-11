@@ -1,0 +1,75 @@
+Assignment: Enterprise-grade Application Deployment and Hardening on Kubernetes
+Project Title: Deploying a Secure Multi-Tier Application Using Helm on Kubernetes
+Objective
+Gain hands-on Kubernetes experience by deploying a prebuilt, multi-tier application using Helm and applying best practices in configuration management, security, and persistence.
+
+Provided Stack
+Use the following prebuilt container images:
+
+nginx (frontend)
+
+redis (in-memory cache)
+
+postgres (persistent database)
+
+A basic starter Helm chart structure and values.yaml will be provided.
+
+Assignment Tasks
+1. Helm Chart Packaging
+Deploy the full stack using a single Helm chart with three subcharts (nginx, redis, postgres).
+
+Use values.yaml to configure image names, ports, and replica counts.
+
+2. Configuration Management
+Create a ConfigMap to provide a custom nginx.conf.
+
+Create a Secret to store PostgreSQL credentials (POSTGRES_USER, POSTGRES_PASSWORD, POSTGRES_DB).
+
+3. Probes and Health Checks
+Add Readiness and Liveness Probes to:
+
+nginx: check HTTP / returns 200
+
+redis: TCP check on port 6379
+
+postgres: TCP check on port 5432
+
+4. Network Policies
+Create a NetworkPolicy that:
+
+Allows traffic from nginx to redis and postgres
+
+Blocks all other pod-to-pod traffic by default
+
+5. RBAC Configuration
+Create a dedicated ServiceAccount for the Helm release.
+
+Bind only the necessary permissions via a Role and RoleBinding (e.g., permissions to get, list, create pods and services in that namespace).
+
+6. Persistent Volumes
+Deploy postgres using a StatefulSet with a PersistentVolumeClaim (PVC).
+
+Use hostPath or dynamic provisioning depending on the cluster setup.
+
+7. Backup Simulation
+Create a Kubernetes CronJob that simulates a backup job:
+
+Mounts the same volume as the database
+
+Writes a dummy backup file like backup-<timestamp>.sql to /mnt/backups
+
+Deliverables
+A GitHub repository containing:
+
+Helm chart with subcharts
+
+YAMLs for ConfigMaps, Secrets, PVCs, RBAC, Probes, NetworkPolicies, and CronJob
+
+Screenshots of:
+
+kubectl get all output
+
+Running Helm release
+
+Successful CronJob log showing backup output
+
