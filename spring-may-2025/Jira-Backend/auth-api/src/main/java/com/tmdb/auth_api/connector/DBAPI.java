@@ -9,8 +9,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.EnumMap;
-import java.util.UUID;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Component
 public class DBAPI {
@@ -19,6 +19,13 @@ public class DBAPI {
 
 
     public Employee callGetEmployeeByEmailEndpoint(String emailId){
+        ArrayList<Integer> li new ArrayList<>();
+        HashSet<Integer> set;
+        LinkedList<Integer> li;
+        PriorityQueue<Integer> pq;
+        Stack<Integer> st;
+        ConcurrentHashMap<Integer, Integer> msp;
+        Hashtable<Integer, Integer> am;
         String url = baseUrl + "/employee/email/" + emailId;
         RequestEntity request = RequestEntity.get(url).build();
         RestTemplate restTemplate = new RestTemplate();

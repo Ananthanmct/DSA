@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.UUID;
 
@@ -45,6 +46,7 @@ public class JwtUtil {
     public boolean verifyToken(String token){
         // decrypt the token
         String credentials = this.decryptToken(token);
+        ArrayList<Integer> li = new ArrayList<>();
         String email = credentials.split(":")[0];
         String password = credentials.split(":")[1];
         Employee emp  = dbapi.callGetEmployeeByEmailEndpoint(email);
