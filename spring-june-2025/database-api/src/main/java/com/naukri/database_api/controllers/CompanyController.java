@@ -18,6 +18,7 @@ public class CompanyController {
 
     @Autowired
     public void CompanyRepo(CompanyRepo companyrepo){
+
         this.companyrepo = companyrepo;
     }
 
