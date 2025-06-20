@@ -5,26 +5,46 @@ import com.naukri.database_api.repositories.ApplicationFormRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.swing.*;
+import java.util.List;
+import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/v1/db")
+@RequestMapping("/api/v1/db/form")
 
 public class ApplicationFormController {
     ApplicationFormRepo applicationFormRepo;
 
     @Autowired
-    public ApplicationFormRepo (ApplicationFormRepo applicationFormRepo)
+    public ApplicationFormController (ApplicationFormRepo applicationFormRepo)
     {
         this.applicationFormRepo = applicationFormRepo;
     }
-    RequestMapping("/saveform")
-    public ResponseEntity saveform (@RequestBody ApplicationForm Form){
-        ApplicationFormRepo.save(Form);
-        return new ResponseEntity(Form, HttpStatus.CREATED);
-  ;  }
+    @PostMapping("/save")
+    public ResponseEntity<ApplicationForm>create (@RequestBody ApplicationForm applicationForm)
+    {
+        applicationFormRepo.save(applicationForm);
+        return new ResponseEntity<>(applicationForm,HttpStatus.CREATED);
+   }
+@GetMapping("/{id}")
+public ResponseEntity<ApplicationForm> findById (@PathVariable UUID id){
+
+ApplicationForm applicationForm = applicationFormRepo.findById(id).orElse(null);
+retrun new ResponseEntity<>(applicationForm,HttpStatus.OK);
 }
+@GetMapping("/findAll")
+public ResponseEntity<ApplicationForm> findAll(){
+List<ApplicationForm> applicationForms = applicationFormRepo.findAll();
+return  new  ResponseEntity<>(applicationForm,HttpStatus.OK);
+}
+@PutMapping ("/update")
+public ResponseEntity<ApplicationForm> update (@RequestBody ApplicationForm applicationForm)
+{applicationFormRepo.save (applicationForm);
+return new ResponseEntity<>(applicationForm,HttpStatus.CREATED);
+}
+@DeleteMapping("\{id})
+public  ResponseEntity delete (@PathVariable UUID id)
+{applicationFormRepo.deleteById(id);
+return new ResponseEntity(HttpStatus.OK);
